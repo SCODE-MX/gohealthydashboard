@@ -1,0 +1,115 @@
+@import '../../../styles.scss';
+
+.card {
+    background: #fff;
+    border-radius: 10px;
+    position: relative;
+    width: 300px;
+    max-width: 300px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    margin: auto;
+
+    &:hover {
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        cursor: pointer;
+    }
+
+    &__img {
+        height: 200px;
+        
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
+    }
+
+    &__holder {
+        padding: 15px 20px;
+        margin-top: 0;
+    }
+
+    &__nombre {
+        margin: 0;
+    }
+
+    &__desc {
+        font-size: 13px;
+        font-weight: 100;
+        font-style: italic;
+        color: #bababa;
+        margin-top: 0;
+        overflow:hidden;
+        white-space:nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__datos {
+        padding-bottom: 5px;
+        border-bottom: 1px solid #bababa;
+        i {
+            color: $color-secundario;
+            padding-right: 5px;
+            text-align: center;
+        }
+    }
+
+    &__estadisticas {
+        padding: 15px 0;
+    }
+
+    &__visitas, &__contacto {
+        flex-basis: 50%;
+        text-align: center;
+
+        p {
+            margin: 0;
+            font-weight: bold;
+
+            span {
+                font-weight: 200;
+                font-size: 12px;
+            }
+        }
+    }
+
+    .button {
+        font-size: 13px;
+    }
+
+    &__agregar {
+        display: none;
+    }
+
+    &_agregar {
+        display: block;
+        background: #efefef;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        cursor: pointer;
+        border: 1px dashed #bababa;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .card {
+            &__img, &__holder {
+                display: none;
+            }
+
+            &__agregar {
+                display: block;
+                &-holder {
+                    text-align: center;
+
+                    p > i {
+                        font-size: 30px;
+                    }
+                }
+            }
+        }
+    }
+
+}

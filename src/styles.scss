@@ -1,1 +1,163 @@
-/* You can add global styles to this file, and also import other style files */
+
+//variables
+$color-principal: #88bf61;
+$color-secundario: #3082bb;
+
+//layout
+html, body {
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+    color: #636363;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+.flex {
+    display: flex;
+}
+
+.container {
+    width: 100%;
+    max-width: 1366px;
+    margin: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+img {
+    display: block;
+    width: 100%;
+}
+
+.titulo {
+    color: #636363;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    transition: all .2s ease-in-out;
+    padding: 5px 10px;
+    
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+a.link {
+    border: 1px solid transparent;
+    text-decoration: none;
+    
+
+    &:hover {
+        transform: scale(1.1);
+        border: 1px solid white;
+    }
+
+}
+
+.button {
+    background-color: $color-secundario;
+    color: white;
+    padding: 10px;
+    max-width: 400px;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 10px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    border: 2px solid transparent;
+    transition: all ease 0.2s;
+
+    &:hover {
+        background-color: white;
+        color: $color-secundario;
+        border: 2px solid $color-secundario;
+        cursor: pointer;
+    }
+
+
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+        font-weight: 200;
+        font-size: 14px;
+        margin: 5px 0;
+    }
+}
+
+//formulario
+
+.form {
+    width: 100%;
+    flex-wrap: wrap;
+
+    &__group {
+        margin-bottom: 30px;
+        padding: 0 5px;
+        flex-basis: 100%;
+
+        &_mitad {
+            flex-basis: 50%;
+        }
+
+        &_tercio {
+            flex-basis: 33.333%;
+        }
+
+         &_center {
+            text-align: center;
+            margin-bottom: 0;
+         }
+     
+    }
+
+
+    &__label {
+        color: #636363;
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 400;
+    }
+
+    &__input, &__select, &__textarea {
+        color: #636363;
+        font-family: 'Nunito', sans-serif;
+        width: 100%;
+        font-weight: 300;
+        background-color: #f3f3f3;
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 16px;
+        transition: all ease 0.2s;
+        letter-spacing: 1px;
+        border: none;
+
+        &:focus {
+            box-shadow: inset 0px 0px 2px #bababa;
+        }
+    }
+
+    &__textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+        resize: none;
+    }
+
+    
+
+
+
+}
