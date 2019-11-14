@@ -5,17 +5,17 @@
       <div class="login__logo">
         <img src="assets/logo_bco.png" alt="">
       </div>
-      <form action="" class="form">
+      <form action="" class="form" [formGroup]="loginForm">
         <div class="form__group">
-          <label class="form__label">Usuario</label>
-          <input class="form__input" type="text"/>
+          <label class="form__label">E-mail</label>
+          <input class="form__input" type="text" formControlName="email" required/>
         </div>
         <div class="form__group">
           <label class="form__label">Contraseña</label>
-          <input class="form__input" type="password"/>
+          <input class="form__input" type="password" formControlName="password" required/>
         </div>
         <div class="form__group form__group_center">
-          <button class="button">
+          <button button class="button" (click)="login()">
             INGRESAR
           </button>
         </div>

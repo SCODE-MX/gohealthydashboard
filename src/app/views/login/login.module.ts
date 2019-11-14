@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login.component';
 import { RouterModule, Routes } from '@angular/router';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { MaterialModule } from '../../material.module';
+
 const routes: Routes = [
   { path: '', component: LoginComponent},
 ];
@@ -10,6 +13,8 @@ const routes: Routes = [
   declarations: [LoginComponent],
   imports: [
     CommonModule,
+    SharedModule,
+    MaterialModule,
     RouterModule.forChild(routes)
   ]
 })
