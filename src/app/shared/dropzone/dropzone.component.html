@@ -1,0 +1,12 @@
+<div class="photos__container">
+    <div *ngFor="let url of urls"  class="photos__item">
+        <app-delete-image [url]="url" [disabled]="true"></app-delete-image>
+    </div>
+</div>
+<div *ngIf="5 > urls.length" class="photos__container">
+    <div class="photos__item">
+        <div class="photos__agregar photos__agregar-holder">
+            <p><i class="fas fa-plus"></i><br> AGREGAR IMAGEN </p>
+        </div>
+    </div>
+</div>

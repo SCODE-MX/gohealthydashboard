@@ -1,111 +1,104 @@
-<div class="detalle container">
+<div *ngIf="data" class="detalle container">
     <div class="detalle__estadisticas">
-        <h3>ESTADÍSTICAS</h3>
+        <h3>ESTADÍSTICAS<br>{{data.nombre}}</h3>
+        <!-- <h3>{{data.nombre}}</h3> -->
         <div class="flex">
-                <div class="detalle__estadisticas-general">
-                        <div class="titulo">GENERAL</div>
-                        <div class="detalle__general flex">
-                            <div class="detalle__general-info">
-                                    <p>VISITAS</p>
-                                    <h3>123</h3>
-                            </div>
-                        </div>
-                        <div class="detalle__general flex">
-                                <div class="detalle__general-info">
-                                        <p>CONTACTO</p>
-                                        <h3>123</h3>
-                                </div>
-                            </div>
+          <div class="detalle__estadisticas-general">
+        <div class="titulo">GENERAL</div>
+        <div class="detalle__general flex">
+            <div class="detalle__general-info">
+                    <p>VISITAS</p>
+                    <h3> {{visitas}} </h3>
+            </div>
+        </div>
+        <div class="detalle__general flex">
+                <div class="detalle__general-info">
+                        <p>CONTACTO</p>
+                        <h3> {{contactos}} </h3>
+                </div>
+            </div>
+    </div>
+    <div class="detalle__estadisticas-mujeres">
+        <div class="titulo">MUJERES</div>
+          <div class="detalle__estadisticas flex">
+              <div class="detalle__general-info">
+                <ngx-charts-bar-vertical [xAxis]="true" [yAxis]="true" [scheme]="barScheme" [results]="mujeres_visitas">
+                </ngx-charts-bar-vertical>
+              </div>
+          </div>
+          <div class="detalle__estadisticas flex">
+            <div class="detalle__general-info">
+                <ngx-charts-bar-vertical [xAxis]="true" [yAxis]="true" [scheme]="barScheme" [results]="mujeres_contactos">
+                  </ngx-charts-bar-vertical>
+            </div>
+          </div>
+        </div>
+        <div class="detalle__estadisticas-hombres">
+                <div class="titulo">HOMBRES</div>
+                <div class="detalle__estadisticas flex">
+                    <div class="detalle__general-info">
+                      <ngx-charts-bar-vertical [xAxis]="true" [yAxis]="true" [scheme]="barScheme" [results]="hombres_visitas">
+                      </ngx-charts-bar-vertical>
                     </div>
-                    <div class="detalle__estadisticas-mujeres">
-                            <div class="titulo">MUJERES</div>
-                            <div class="detalle__general flex">
-                                <div class="detalle__general-info">
-                                        <p>GRÁFICA</p>
-                                        <h3>---</h3>
-                                </div>
-                            </div>
-                            <div class="detalle__general flex">
-                                    <div class="detalle__general-info">
-                                            <p>GRÁFICA</p>
-                                            <h3>---</h3>
-                                    </div>
-                                </div>
-                        </div>
-                        <div class="detalle__estadisticas-hombres">
-                                <div class="titulo">HOMBRES</div>
-                                <div class="detalle__general flex">
-                                    <div class="detalle__general-info">
-                                            <p>GRÁFICA</p>
-                                            <h3>---</h3>
-                                    </div>
-                                </div>
-                                <div class="detalle__general flex">
-                                        <div class="detalle__general-info">
-                                                <p>GRÁFICA</p>
-                                                <h3>---</h3>
-                                        </div>
-                                    </div>
-                            </div>
+                </div>
+                <div class="detalle__estadisticas flex">
+                  <div class="detalle__general-info">
+                      <ngx-charts-bar-vertical [xAxis]="true" [yAxis]="true" [scheme]="barScheme" [results]="hombres_contactos">
+                        </ngx-charts-bar-vertical>
+                  </div>
+                </div>
+            </div>
         </div>
         
-    </div>
-    <div class="detalle__estadisticas">
+      </div>
+      <div class="detalle__estadisticas">
         <h3>DATOS DEL ANUNCIO</h3>
         <div class="detalle__form">
-                <form action="" class="form flex">
-                  <div class="form__group form__group_tercio">
-                    <div class="detalle__img">
-                        <img src="assets/img.png" alt="" />
+          <app-dropzone [urls]="data.urlFotos"></app-dropzone>
+          <form action="" class="form flex">
+                  <div  class="form flex">
+                    <div class="form__group form__group_tercio">
+                      <label class="form__label">Nombre</label>
+                      <input class="form__input" type="text" [value]="data.nombre" />
                     </div>
-                  </div>
-                  <div class="form__group form__group_tercio">
-                    <div class="detalle__img">
-                        <img src="assets/img.png" alt="" />
+                    <div class="form__group form__group_tercio">
+                      <label class="form__label">Dirección</label>
+                      <input class="form__input" type="text" [value]="data.direccion" />
                     </div>
+                    <div class="form__group form__group_tercio">
+                      <label class="form__label">Teléfono</label>
+                      <input class="form__input" type="text" [value]="data.telefono" />
                   </div>
-                  <div class="form__group form__group_tercio">
-                        <div class="detalle__img detalle__img_agregar">
-                                <div class="detalle__img_agregar-holder">
-                                    <p><i class="fas fa-plus"></i><br> AGREGAR IMAGEN </p>
-                                </div>
-                              </div>
+                    <div class="form__group form__group_tercio">
+                      <label class="form__label">Correo electrónico</label>
+                      <input class="form__input" type="text" [value]="data.correo" />
                   </div>
-                  <div class="form__group form__group_tercio">
-                    <label class="form__label">Nombre</label>
-                    <input class="form__input" type="text" value="L.N. Juan Pérez Pedroso" />
+                    <div class="form__group form__group_tercio">
+                      <label class="form__label">Horario</label>
+                      <input class="form__input" type="text" [value]="data.horario" />
                   </div>
-                  <div class="form__group form__group_tercio">
-                    <label class="form__label">Dirección</label>
-                    <input class="form__input" type="text" value="Mérida, Yucatán" />
+                    <div class="form__group form__group_tercio">
+                      <label class="form__label">Latitud</label>
+                      <input class="form__input" type="text" [value]="data.latitud" />
                   </div>
-                  <div class="form__group form__group_tercio">
-                    <label class="form__label">Teléfono</label>
-                    <input class="form__input" type="text" value="correo@example.com" />
-                </div>
-                  <div class="form__group form__group_tercio">
-                    <label class="form__label">Correo electrónico</label>
-                    <input class="form__input" type="text" value="correo@example.com" />
-                </div>
-                  <div class="form__group form__group_tercio">
-                    <label class="form__label">Horario</label>
-                    <input class="form__input" type="text" value="correo@example.com" />
-                </div>
-                  <div class="form__group form__group_tercio">
-                    <label class="form__label">Ubicación <i>(URL Google Maps)</i></label>
-                    <input class="form__input" type="text" value="correo@example.com" />
-                </div>
-                  <div class="form__group form__group_tercio">
-                    <label class="form__label">Facebook</label>
-                    <input class="form__input" type="text" value="correo@example.com" />
-                </div>
-                  <div class="form__group form__group_tercio">
-                    <label class="form__label">Sitio web</label>
-                    <input class="form__input" type="text" value="correo@example.com" />
-                </div>
+                    <div class="form__group form__group_tercio">
+                      <label class="form__label">Longitud</label>
+                      <input class="form__input" type="text" [value]="data.longitud" />
+                  </div>
+                    <div class="form__group form__group_tercio">
+                      <label class="form__label">Facebook</label>
+                      <input class="form__input" type="text" [value]="data.facebook" />
+                  </div>
+                    <div class="form__group form__group_tercio">
+                      <label class="form__label">Sitio web</label>
+                      <input class="form__input" type="text" [value]="data.sitio_web" />
+                  </div>
+                  </div>
+
                   <div class="form__group">
                     <label class="form__label">Descripción</label>
-                    <textarea class="form__textarea" formControlName="message">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure doloremque voluptate pariatur repudiandae nemo, earum molestias quo reiciendis porro magni exercitationem fugit totam ratione. Reprehenderit accusamus voluptatibus ea eveniet inventore!</textarea>
+                    <textarea class="form__textarea" [value]="data.descripcion">
+                    </textarea>
                 </div>
                   <div class="form__group form__group_center">
                     <button class="button">

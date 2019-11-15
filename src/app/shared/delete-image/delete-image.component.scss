@@ -1,0 +1,53 @@
+.delete {
+    &__container {
+        position: relative;
+        // border-radius: 10px;
+        // margin-top: 50px;
+        width: 100%;
+        height: 200px;
+        &:hover .delete__button {
+            opacity: 1; 
+        }
+    }
+
+    &__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0);
+        transition: background 0.5s ease;
+        &:hover {
+            display: block;
+            background: rgba(0, 0, 0, .3);
+        }
+    }
+
+    &__img {
+        position: absolute;
+        display: block; 
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    &__button {
+        position: absolute;
+        font-size: 20px;
+        right: 10px;
+        top: 10px;
+        // text-align: center;
+        opacity: 0;
+        transition: opacity .35s ease;
+        z-index: 1;
+        border: 1px #ffffff;
+        // border-radius: 30px;
+        cursor: pointer;
+    }
+    // &__icon {
+    //     width
+    // }
+}

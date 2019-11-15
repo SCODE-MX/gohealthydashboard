@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DirectorioI } from '../../models/interfaces/general.interfaces';
+import { Router } from '@angular/router';
+import { normalizeString } from '../../models/functions/general.functions';
 
 @Component({
   selector: 'app-card',
@@ -11,7 +13,7 @@ export class CardComponent implements OnInit {
   contactos: number;
   @Input() data: DirectorioI;
   @Input() option: boolean;
-  constructor() {
+  constructor( private router: Router ) {
 
   }
 
@@ -46,6 +48,9 @@ export class CardComponent implements OnInit {
         this.data.contactos_m_55_mas
       );
     }
+  }
+  detalle() {
+    this.router.navigate(['dashboard/detalle', normalizeString(this.data.estado), this.data.id]);
   }
 
 }

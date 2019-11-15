@@ -1,0 +1,46 @@
+.photos{
+    &__container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        align-content: center;
+        width: 100%;
+        padding-bottom: 20px;
+        text-align: center;
+    }
+    &__item {
+        flex-basis: 33.3%;
+        text-align: center;
+        height: 100%;
+        padding: 0px 5px;
+    }
+    &__agregar {
+        background:
+        #efefef;
+        box-shadow: 0 1px 3px
+        rgba(0, 0, 0, 0.12), 0 1px 2px
+        rgba(0, 0, 0, 0.24);
+        cursor: pointer;
+        border: 1px dashed
+        #bababa;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        border-radius: 10px;
+        &:hover {
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            cursor: pointer;
+        }
+
+        &-holder {
+            text-align: center;
+
+            p > i {
+                font-size: 30px;
+            }
+        }
+    }
+}

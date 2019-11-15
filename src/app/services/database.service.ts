@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 // import { FormulariosI } from '../models/interfaces';
 
 @Injectable({
@@ -36,7 +36,9 @@ export class DatabaseService {
   getDocumentData<T>(reference: string, id: string) {
     return this.afs.collection(`${reference}`, ref =>
       ref.orderBy('createdOn', 'desc')
-    ).doc<T>(id).get();
+    ).doc<T>(id).get().pipe(
+      map(doc => ({id: doc.id, ...doc.data()}))
+      );
   }
 
   // async update<T>(reference: string, data: any, id: string, element: FormulariosI<any>): Promise<void> {

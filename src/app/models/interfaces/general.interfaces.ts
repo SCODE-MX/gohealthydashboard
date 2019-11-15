@@ -16,14 +16,14 @@ export interface DirectorioI {
     direccion: string;
     estado: string;
     facebook: string;
-    horarios: string;
+    horario: string;
     latitud: number;
     likes: number;
     longitud: number;
     id?: string;
     nombre: string;
     telefono: string;
-    sitioWeb: string;
+    sitio_web: string;
     referencias: string[];
     refFotos: string[];
     urlFotos: string[];
@@ -52,4 +52,8 @@ export interface DirectorioI {
     contactos_m_35_44: number;
     contactos_m_45_54: number;
     contactos_m_55_mas: number;
+}
+export interface ChartType {
+    name: string;
+    value: number;
 }
