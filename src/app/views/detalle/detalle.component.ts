@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from 'src/app/services/database.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DirectorioI, ChartType } from '../../models/interfaces/general.interfaces';
+import { normalizeString } from '../../models/functions/general.functions';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-detalle',
@@ -10,6 +12,7 @@ import { DirectorioI, ChartType } from '../../models/interfaces/general.interfac
 })
 export class DetalleComponent implements OnInit {
   data: any;
+  form: FormGroup;
   visitas: any;
   contactos: any;
   barScheme = {
@@ -19,13 +22,31 @@ export class DetalleComponent implements OnInit {
   mujeres_contactos: ChartType[];
   hombres_visitas: ChartType[];
   hombres_contactos: ChartType[];
+  newImg: File[];
+  delImg: string[];
+  tempUrl: string[];
+  tempRef: string[];
+  imgValid = true;
 
   constructor(
     // private storage: StorageService,
     private service: DatabaseService,
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     ) {
+      this.form = this.fb.group({
+        nombre: ['', Validators.required],
+        descripcion: ['', Validators.required],
+        telefono: ['', Validators.compose([Validators.pattern(/^[0-9]{8,10}/), Validators.required])],
+        direccion: ['', Validators.required],
+        horario: ['', Validators.required],
+        latitud: ['', Validators.compose([Validators.pattern(/^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}/), Validators.required])],
+        longitud: ['', Validators.compose([Validators.pattern(/^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}/), Validators.required])],
+        correo: ['', Validators.compose([Validators.required, Validators.email])],
+        sitio_web: '',
+        facebook: '',
+      });
       this.route.paramMap.subscribe(params => {
         console.log(params);
         if (params.has('id') && params.has('estado')) {
@@ -175,7 +196,27 @@ export class DetalleComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    console.log('form.invalid', this.form.invalid);
+  }
+  added(event) {
+    console.log('from added', event);
+    this.newImg = event;
+  }
+  deleted(event) {
+    console.log('from deleted', event);
+    this.delImg = event;
+  }
+  urlResult(event) {
+    console.log('from urlResult', event);
+    this.tempUrl = event;
+  }
+  refResult(event) {
+    console.log('from redResult', event);
+    this.tempRef = event;
+  }
+  validPhotos(event) {
+    console.log('img is valid?', event);
+    this.imgValid = event;
   }
 
 }

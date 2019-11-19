@@ -5,14 +5,14 @@ import { CardComponent } from './card/card.component';
 import { MaterialModule } from '../material.module';
 import { DropzoneComponent } from './dropzone/dropzone.component';
 import { DeleteImageComponent } from './delete-image/delete-image.component';
-
-
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 @NgModule({
   declarations: [NavbarComponent, CardComponent, DropzoneComponent, DeleteImageComponent],
   imports: [
     CommonModule,
-    MaterialModule
+    MaterialModule,
+    NgxDropzoneModule
   ],
   exports: [
     NavbarComponent,

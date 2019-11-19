@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DetalleComponent } from '../detalle/detalle.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 
 const routes: Routes = [
@@ -18,12 +19,16 @@ const routes: Routes = [
     CommonModule,
     SharedModule,
     NgxChartsModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ReactiveFormsModule,
+    FormsModule,
   ],
 
   exports: [
     SharedModule,
     NgxChartsModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
 })
 export class DashboardModule { }

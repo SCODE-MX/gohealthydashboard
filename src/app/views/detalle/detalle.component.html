@@ -1,14 +1,14 @@
 <div *ngIf="data" class="detalle container">
     <div class="detalle__estadisticas">
-        <h3>ESTADÍSTICAS<br>{{data.nombre}}</h3>
+        <h3>{{data.nombre}}<br>ESTADÍSTICAS</h3>
         <!-- <h3>{{data.nombre}}</h3> -->
         <div class="flex">
           <div class="detalle__estadisticas-general">
         <div class="titulo">GENERAL</div>
         <div class="detalle__general flex">
             <div class="detalle__general-info">
-                    <p>VISITAS</p>
-                    <h3> {{visitas}} </h3>
+              <p>VISITAS</p>
+              <h3> {{visitas}} </h3>
             </div>
         </div>
         <div class="detalle__general flex">
@@ -54,59 +54,67 @@
       <div class="detalle__estadisticas">
         <h3>DATOS DEL ANUNCIO</h3>
         <div class="detalle__form">
-          <app-dropzone [urls]="data.urlFotos"></app-dropzone>
-          <form action="" class="form flex">
+          <app-dropzone
+          [urls]="data.urlFotos"
+          [refs]="data.refFotos"
+          (added)="added($event)"
+          (deleted)="deleted($event)"
+          (refresult)="refResult($event)"
+          (urlresult)="urlResult($event)"
+          (isValid)="validPhotos($event)">
+          </app-dropzone>
+          <form [formGroup]="form" action="" class="form flex">
                   <div  class="form flex">
                     <div class="form__group form__group_tercio">
                       <label class="form__label">Nombre</label>
-                      <input class="form__input" type="text" [value]="data.nombre" />
+                      <input class="form__input" formControlName="nombre" type="text" [value]="data.nombre" />
                     </div>
                     <div class="form__group form__group_tercio">
                       <label class="form__label">Dirección</label>
-                      <input class="form__input" type="text" [value]="data.direccion" />
+                      <input class="form__input" formControlName="direccion" type="text" [value]="data.direccion" />
                     </div>
                     <div class="form__group form__group_tercio">
                       <label class="form__label">Teléfono</label>
-                      <input class="form__input" type="text" [value]="data.telefono" />
+                      <input class="form__input" formControlName="telefono" type="text" [value]="data.telefono" />
                   </div>
                     <div class="form__group form__group_tercio">
                       <label class="form__label">Correo electrónico</label>
-                      <input class="form__input" type="text" [value]="data.correo" />
+                      <input class="form__input" formControlName="correo" type="text" [value]="data.correo" />
                   </div>
                     <div class="form__group form__group_tercio">
                       <label class="form__label">Horario</label>
-                      <input class="form__input" type="text" [value]="data.horario" />
+                      <input class="form__input" formControlName="horario" type="text" [value]="data.horario" />
                   </div>
                     <div class="form__group form__group_tercio">
                       <label class="form__label">Latitud</label>
-                      <input class="form__input" type="text" [value]="data.latitud" />
+                      <input class="form__input" formControlName="latitud" type="text" [value]="data.latitud" />
                   </div>
                     <div class="form__group form__group_tercio">
                       <label class="form__label">Longitud</label>
-                      <input class="form__input" type="text" [value]="data.longitud" />
+                      <input class="form__input" formControlName="longitud" type="text" [value]="data.longitud" />
                   </div>
                     <div class="form__group form__group_tercio">
                       <label class="form__label">Facebook</label>
-                      <input class="form__input" type="text" [value]="data.facebook" />
+                      <input class="form__input" formControlName="facebook" type="text" [value]="data.facebook" />
                   </div>
                     <div class="form__group form__group_tercio">
                       <label class="form__label">Sitio web</label>
-                      <input class="form__input" type="text" [value]="data.sitio_web" />
+                      <input class="form__input" formControlName="sitio_web" type="text" [value]="data.sitio_web" />
                   </div>
                   </div>
 
                   <div class="form__group">
                     <label class="form__label">Descripción</label>
-                    <textarea class="form__textarea" [value]="data.descripcion">
+                    <textarea class="form__textarea" formControlName="descripcion" [value]="data.descripcion">
                     </textarea>
                 </div>
                   <div class="form__group form__group_center">
-                    <button class="button">
+                    <button class="button" [disabled]="form.invalid || !imgValid">
                       GUARDAR CAMBIOS
                     </button>
                   </div>
-                </form>
-              </div>
+        </form>
+      </div>
         
     </div>
 </div>

@@ -110,8 +110,16 @@ a.link {
         border: 2px solid $color-secundario;
         cursor: pointer;
     }
-
-
+}
+button:disabled {
+    background-color: #636363;
+    // color: #636363;
+    &:hover {
+        background-color: #636363;
+        color: white;
+        border: 2px solid transparent;
+        cursor: inherit;
+    }
 }
 
 ul {
