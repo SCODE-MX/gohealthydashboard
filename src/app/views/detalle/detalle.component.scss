@@ -1,8 +1,20 @@
 @import '../../../styles.scss';
 
+
 .detalle {
     padding-top: 50px;
-
+    &__button-active {
+        position: absolute;
+        left: 20px;
+        top: 75px;
+        background-color: #88bf61;
+    }
+    &__button-defuse {
+        position: absolute;
+        left: 20px;
+        top: 75px;
+        background-color: #3082bb;
+    }
     &__estadisticas {
         margin-bottom: 100px;
 

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DirectorioI, ChartType } from '../../models/interfaces/general.interfaces';
 import { normalizeString } from '../../models/functions/general.functions';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-detalle',
@@ -33,7 +34,8 @@ export class DetalleComponent implements OnInit {
     private service: DatabaseService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
+    public router: Router,
+    private toastr: ToastrService,
     ) {
       this.form = this.fb.group({
         nombre: ['', Validators.required],
@@ -56,6 +58,9 @@ export class DetalleComponent implements OnInit {
           this.service.getDocumentData<DirectorioI>(`Directorio/Estados/${estado}/`, id).subscribe( (res) => {
             console.log('gettin data in detail', {res});
             this.data = res;
+            this.form.patchValue(this.data);
+            this.tempRef = this.data.refFotos;
+            this.tempUrl = this.data.urlFotos;
             this.visitas = (
               this.data.visitas_h_16_17 +
               this.data.visitas_h_18_24 +
@@ -196,7 +201,6 @@ export class DetalleComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('form.invalid', this.form.invalid);
   }
   added(event) {
     console.log('from added', event);
@@ -219,4 +223,40 @@ export class DetalleComponent implements OnInit {
     this.imgValid = event;
   }
 
+  async save(): Promise<void> {
+    console.log('data', {...this.data});
+    const promiseArray: Promise<any>[] = [];
+    if (this.delImg) {
+      console.log('hay imagenes para eliminar aquí se deben eliminar las fotos ref->', this.delImg);
+      // tambien se deben actualizar los archivos temporales
+      this.delImg.forEach(path => {
+        console.log('Path for each deleted img', path);
+        promiseArray.push(this.service.deletePhoto(path));
+      });
+      await Promise.all(promiseArray).then(() => {
+        this.toastr.success('El cambio de fotos se ha realizado exitosamente', 'Actualización');
+      })
+      .catch(err => {
+        this.toastr.error(err.message, 'Error');
+        console.error(err);
+      });
+    }
+    // despues de cumplir las promesas de guardado o de eliminado si es que hay, aquí se actualizan los arrays de ref y url
+    // y se actualiza el documento
+    if (this.form.valid && this.data) {
+      const finalForm = {
+        ...this.data,
+        ...this.form.value,
+      };
+      console.log({...this.form.value});
+      this.service.update(`Directorio/Estados/${normalizeString(finalForm.estado)}/`, finalForm, finalForm.id, this.newImg)
+      .then(() => {
+        this.toastr.success('La operación se ha realizado exitosamente', 'Guardado');
+      })
+      .catch(err => {
+        this.toastr.error(err.message, 'Error');
+        console.error(err);
+      });
+    }
+  }
 }

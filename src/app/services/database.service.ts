@@ -4,6 +4,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 // import { FormulariosI } from '../models/interfaces';
+import { DirectorioI } from '../models/interfaces/general.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -41,34 +42,18 @@ export class DatabaseService {
       );
   }
 
-  // async update<T>(reference: string, data: any, id: string, element: FormulariosI<any>): Promise<void> {
-  //   const collection = this.getCollection(reference);
-  //   if ( element.archivos ) {
-  //     console.log('if element.archivos');
-  //     const uploadData = await this.uploadfiles(reference, element.formulario.nombre, element.archivos);
-  //     element.formulario.urlFotos = [...element.formulario.urlFotos, ...uploadData.url];
-  //     element.formulario.refFotos = [...element.formulario.refFotos, ...uploadData.ref];
-  //     console.log('despues de uploadfiles ->', element.formulario);
-  //   }
-  //   return collection.doc<T>(id).update(element.formulario);
-  // }
-  // async create<T>(reference: string, data: FormulariosI<any>, idFormed?: string ): Promise<void> {
-  //   let id: string;
-  //   if (idFormed) {
-  //     id = `${idFormed}${this.afs.createId()}`;
-  //   } else {
-  //     id = this.afs.createId();
-  //   }
-  //   const timestamp = new Date();
-  //   const collection = this.getCollection(reference);
-  //   if ( data.archivos ) {
-  //     const uploadData = await this.uploadfiles(reference, data.formulario.nombre, data.archivos);
-  //     data.formulario['urlFotos'] = uploadData.url;
-  //     data.formulario['refFotos'] = uploadData.ref;
-  //   }
-  //   // console.log({ id, ...data.formulario, createdOn: timestamp });
-  //   return collection.doc(id).set({ id, ...data.formulario, createdOn: timestamp });
-  // }
+  async update<T>(reference: string, data: any, id: string, archivos?: File[]): Promise<void> {
+    const collection = this.getCollection(reference);
+    if ( archivos ) {
+      console.log('if archivos');
+      const uploadData = await this.uploadfiles(reference, data.nombre, archivos);
+      data.urlFotos = [...data.urlFotos, ...uploadData.url];
+      data.refFotos = [...data.refFotos, ...uploadData.ref];
+      console.log('despues de uploadfiles ->', data);
+    }
+    return collection.doc<T>(id).update(data);
+  }
+
   delete(reference: string, id: string): Promise<void> {
     const collection = this.getCollection(reference);
     return collection.doc(id).delete();
