@@ -1,0 +1,51 @@
+@import '../../../styles.scss';
+
+.popup {
+    max-width: 500px;
+    background: white;
+    border-radius:5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    &__titulo {
+        background: rgb(157,202,84);
+        background: linear-gradient(45deg, rgba(157,202,84,1) 0%, rgba(45,156,137,1) 100%);
+        padding: 3px 10px;
+        border-radius: 5px 5px 0 0;
+
+        h3 {
+            color: white;
+            text-align: center;
+        }
+    }
+
+    &__info {
+        padding: 15px 20px;
+        text-align: center;
+        
+        p {
+            letter-spacing: 1px;
+            font-weight: bold;
+
+            span {
+                color: $color-principal;
+            }
+        }
+    }
+
+    &__btns {
+        text-align: center;
+        .button {
+            margin-bottom: 25px;
+
+            &_gris {
+                background-color: #bababa;
+
+                &:hover {
+                    background-color: white;
+                    color: #bababa;
+                    border: 2px solid #bababa;
+                    cursor: pointer;
+                }
+            } 
+        }
+    }
+}
