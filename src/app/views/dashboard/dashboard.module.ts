@@ -4,10 +4,13 @@ import { DashboardComponent } from './dashboard.component';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DetalleComponent } from '../detalle/detalle.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+
 
 const routes: Routes = [
   { path: '', component:  DashboardComponent},
-  { path: 'detalle', component:  DetalleComponent},
+  { path: 'detalle/:estado/:id', component:  DetalleComponent},
 ];
 @NgModule({
   declarations: [DashboardComponent, DetalleComponent],
@@ -15,7 +18,17 @@ const routes: Routes = [
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(routes)
-  ]
+    NgxChartsModule,
+    RouterModule.forChild(routes),
+    ReactiveFormsModule,
+    FormsModule,
+  ],
+
+  exports: [
+    SharedModule,
+    NgxChartsModule,
+    ReactiveFormsModule,
+    FormsModule
+  ],
 })
 export class DashboardModule { }
