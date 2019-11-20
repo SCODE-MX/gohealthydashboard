@@ -5,7 +5,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 
 
 const routes: Routes = [
-  { path: '', loadChildren : () => import('../../views/dashboard/dashboard.module').then(m => m.DashboardModule)},
+  { path: 'dashboard', loadChildren : () => import('../../views/dashboard/dashboard.module').then(m => m.DashboardModule)},
+  { path: '', redirectTo: 'dashboard' },
 ];
 @NgModule({
   declarations: [],

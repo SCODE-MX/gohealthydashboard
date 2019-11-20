@@ -1,20 +1,20 @@
 <div class="dashboard container">
-  <div class="dashboard__datos">
+  <div *ngIf="userInfo"  class="dashboard__datos">
     <h1 class="titulo">DATOS GENERALES</h1>
     <div class="dashboard__form">
       <form action="" class="form flex">
         <div class="form__group form__group_tercio">
           <label class="form__label">Nombre</label>
-          <input class="form__input" type="text" value="L.N. Juan Pérez Pedroso" readonly/>
+          <input class="form__input" type="text" [value]="userInfo.nombre" readonly/>
         </div>
         <div class="form__group form__group_tercio">
-          <label class="form__label">Ciudad y estado</label>
-          <input class="form__input" type="text" value="Mérida, Yucatán" readonly/>
+          <label class="form__label">Estado</label>
+          <input class="form__input" type="text" [value]="userInfo.estado" readonly/>
         </div>
         <div class="form__group form__group_tercio">
-                <label class="form__label">Correo electrónico</label>
-                <input class="form__input" type="text" value="correo@example.com" readonly/>
-              </div>
+          <label class="form__label">Correo electrónico</label>
+          <input class="form__input" type="text" [value]="userInfo.correo" readonly/>
+        </div>
         <div class="form__group form__group_center">
           <button class="button">
             SOLICITAR CAMBIOS
@@ -24,12 +24,8 @@
     </div>
   </div>
 
-  <div class="dashboard__anuncios">
+  <div *ngIf="places" class="dashboard__anuncios">
       <div class="flex">
-          <app-card></app-card>
-          <app-card></app-card>
-          <app-card></app-card>
-          <app-card></app-card>
           <app-card></app-card>
       </div>
   </div>

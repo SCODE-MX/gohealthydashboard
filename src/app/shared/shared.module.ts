@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './navbar/navbar.component';
 import { CardComponent } from './card/card.component';
 import { PopupComponent } from './popup/popup.component';
+import { MaterialModule } from '../material.module';
 
 
 
 @NgModule({
   declarations: [NavbarComponent, CardComponent, PopupComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    MaterialModule
   ],
-  exports:[
+  exports: [
     NavbarComponent,
     CardComponent,
     PopupComponent

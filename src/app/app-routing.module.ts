@@ -2,16 +2,20 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+import { AdminGuardService } from './auth/admin-guard.service';
+import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 const routes: Routes = [
     {
       path: '',
-      redirectTo: 'directorio',
+      redirectTo: 'dashboard',
       pathMatch: 'full',
     },
     {
       path: '',
       component: AdminLayoutComponent,
+      canActivate: [AdminGuardService],
       children: [
         {
           path: '',
@@ -30,13 +34,16 @@ const routes: Routes = [
     },
     {
       path: '**',
-      redirectTo: 'login'
+      redirectTo: 'dashboard'
     }
   ];
 
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
