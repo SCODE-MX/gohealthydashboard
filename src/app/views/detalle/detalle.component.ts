@@ -61,138 +61,12 @@ export class DetalleComponent implements OnInit {
             this.form.patchValue(this.data);
             this.tempRef = this.data.refFotos;
             this.tempUrl = this.data.urlFotos;
-            this.visitas = (
-              this.data.visitas_h_16_17 +
-              this.data.visitas_h_18_24 +
-              this.data.visitas_h_25_34 +
-              this.data.visitas_h_35_44 +
-              this.data.visitas_h_45_54 +
-              this.data.visitas_h_55_mas +
-              this.data.visitas_m_16_17 +
-              this.data.visitas_m_18_24 +
-              this.data.visitas_m_25_34 +
-              this.data.visitas_m_35_44 +
-              this.data.visitas_m_45_54 +
-              this.data.visitas_m_55_mas
-            );
-            this.contactos = (
-              this.data.contactos_h_16_17 +
-              this.data.contactos_h_18_24 +
-              this.data.contactos_h_25_34 +
-              this.data.contactos_h_35_44 +
-              this.data.contactos_h_45_54 +
-              this.data.contactos_h_55_mas +
-              this.data.contactos_m_16_17 +
-              this.data.contactos_m_18_24 +
-              this.data.contactos_m_25_34 +
-              this.data.contactos_m_35_44 +
-              this.data.contactos_m_45_54 +
-              this.data.contactos_m_55_mas
-            );
-            this.hombres_visitas = [
-              {
-                name: '16-17',
-                value: this.data.visitas_h_16_17,
-              },
-              {
-                name: '18-24',
-                value: this.data.visitas_h_18_24,
-              },
-              {
-                name: '25-34',
-                value: this.data.visitas_h_25_34,
-              },
-              {
-                name: '35-44',
-                value: this.data.visitas_h_35_44,
-              },
-              {
-                name: '45-54',
-                value: this.data.visitas_h_45_54,
-              },
-              {
-                name: '55-mas',
-                value: this.data.visitas_h_55_mas,
-              },
-            ];
-            this.hombres_contactos = [
-              {
-                name: '16-17',
-                value: this.data.contactos_h_16_17,
-              },
-              {
-                name: '18-24',
-                value: this.data.contactos_h_18_24,
-              },
-              {
-                name: '25-34',
-                value: this.data.contactos_h_25_34,
-              },
-              {
-                name: '35-44',
-                value: this.data.contactos_h_35_44,
-              },
-              {
-                name: '45-54',
-                value: this.data.contactos_h_45_54,
-              },
-              {
-                name: '55-mas',
-                value: this.data.contactos_h_55_mas,
-              },
-            ];
-            this.mujeres_contactos = [
-              {
-                name: '16-17',
-                value: this.data.contactos_m_16_17,
-              },
-              {
-                name: '18-24',
-                value: this.data.contactos_m_18_24,
-              },
-              {
-                name: '25-34',
-                value: this.data.contactos_m_25_34,
-              },
-              {
-                name: '35-44',
-                value: this.data.contactos_m_35_44,
-              },
-              {
-                name: '45-54',
-                value: this.data.contactos_m_45_54,
-              },
-              {
-                name: '55-mas',
-                value: this.data.contactos_m_55_mas,
-              },
-            ];
-            this.mujeres_visitas = [
-              {
-                name: '16-17',
-                value: this.data.visitas_m_16_17,
-              },
-              {
-                name: '18-24',
-                value: this.data.visitas_m_18_24,
-              },
-              {
-                name: '25-34',
-                value: this.data.visitas_m_25_34,
-              },
-              {
-                name: '35-44',
-                value: this.data.visitas_m_35_44,
-              },
-              {
-                name: '45-54',
-                value: this.data.visitas_m_45_54,
-              },
-              {
-                name: '55-mas',
-                value: this.data.visitas_m_55_mas,
-              },
-            ];
+            this.visitas = this.sumByName(this.data, 'visitas_');
+            this.contactos = this.sumByName(this.data, 'contactos_');
+            this.hombres_visitas = this.arrChartType(this.data, 'visitas_h_');
+            this.hombres_contactos = this.arrChartType(this.data, 'contactos_h_');
+            this.mujeres_contactos = this.arrChartType(this.data, 'contactos_m_');
+            this.mujeres_visitas = this.arrChartType(this.data, 'visitas_m_');
           });
         } else {
           this.router.navigate(['blog']);
@@ -259,4 +133,22 @@ export class DetalleComponent implements OnInit {
       });
     }
   }
+  sumByName(obj: Object, name: string): number {
+    let acc = 0;
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key) && key.includes(name)) {
+             acc = acc + obj[key];
+        }
+    }
+    return acc;
+  }
+  arrChartType(obj: Object, name: string): any[] {
+    const arrayChatType: any[] = [];
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key) && key.includes(name)) {
+            arrayChatType.push({name: key.slice(name.length, key.length).replace('_','-'), value: obj[key]})
+        }
+    }
+    return arrayChatType;
+}
 }
