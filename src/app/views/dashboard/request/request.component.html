@@ -1,0 +1,14 @@
+<h3 mat-dialog-title>Introduce detalles sobre el anuncio:</h3>
+<mat-dialog-content>
+    <form action="" class="form flex" [formGroup]="form">
+        <div class="form__group">
+            <label class="form__label">Mensaje</label>
+            <textarea class="form__textarea" rows="15" formControlName="mensaje"></textarea>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions style="display: flex; justify-content: space-between;">
+    <button button class="button" (click)="dialogRef.close()" style="width: 150px;">CANCELAR</button>
+    <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+    <button button class="button button-success" (click)="send()" style="width: 150px;">ENVIAR</button>
+</mat-dialog-actions>

@@ -27,7 +27,7 @@
   <div *ngIf="places && places.length" class="dashboard__anuncios">
       <div class="flex">
           <app-card *ngFor="let place of places" [data]="place" [option]="true"></app-card>
-          <app-card *ngIf="5 > places.length" [option]="false"></app-card>
+          <app-card button *ngIf="5 > places.length" [option]="false" (click)="openRequest()"></app-card>
       </div>
   </div>
 </div>
