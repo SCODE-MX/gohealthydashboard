@@ -1,10 +1,10 @@
 <div class="popup" *ngIf="user | async as plan">
     <div class="popup__titulo">
-        <h3>DETALLES DE MI PLAN</h3>
+      <h3>DETALLES DE MI PLAN</h3>
     </div>
 
     <div class="popup__info">
-        <p><span>PLAN ACTUAL: </span>{{plan.planName}}</p>
+      <p><span>PLAN ACTUAL: </span>{{plan.planName}}</p>
     </div>
 
     <div class="popup__info">
@@ -12,11 +12,18 @@
     </div>
 
     <div class="popup__btns">
+      <ng-container *ngIf="plan.planName == 'PREMIUM' && plan.status == 'ACTIVO'; else subscribe">
+        <button class="button">
+          CANCELAR MI PLAN
+        </button>
+      </ng-container>
+      <ng-template #subscribe>
         <button class="button" [routerLink]="['/subscribe']">
           CAMBIAR A PLAN PREMIUM
         </button>
-        <button  mat-dialog-close="data.animal" cdkFocusInitial class="button button_gris">
-          CERRAR
-        </button>
+      </ng-template>
+      <button  mat-dialog-close="data.animal" cdkFocusInitial class="button button_gris">
+        CERRAR
+      </button>
     </div>
 </div>
