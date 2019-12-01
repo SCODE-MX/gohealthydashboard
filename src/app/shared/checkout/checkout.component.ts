@@ -13,13 +13,10 @@ declare var StripeCheckout: StripeCheckoutStatic;
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
-
   @Input() amount;
   @Input() description;
 
-
   constructor(private stripe: StripeService, private functions: AngularFireFunctions) { }
-
 
   handler: StripeCheckoutHandler;
 
@@ -30,7 +27,8 @@ export class CheckoutComponent implements OnInit {
     this.handler = StripeCheckout.configure({
       key: environment.stripe.key,
       image: './assets/premium.jpg',
-      locale: 'mx',
+      locale: 'es',
+      currency: 'mxn',
       allowRememberMe: false,
       source: async (source) => {
         this.loading = true;
