@@ -1,15 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { StripeService } from 'src/app/services/stripe.service';
 
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+export interface DialogData {
+  animal: string;
+  name: string;
+}
 @Component({
   selector: 'app-popup',
   templateUrl: './popup.component.html',
   styleUrls: ['./popup.component.scss']
 })
-export class PopupComponent implements OnInit {
+export class PopupComponent {
 
-  constructor() { }
+  public user;
+  public something;
 
-  ngOnInit() {
+  constructor(
+    public dialogRef: MatDialogRef<PopupComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private stripe: StripeService,
+  ) {
+    this.user = this.stripe.user$;
   }
-
 }

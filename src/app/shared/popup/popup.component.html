@@ -1,18 +1,22 @@
-<div class="popup">
+<div class="popup" *ngIf="user | async as plan">
     <div class="popup__titulo">
         <h3>DETALLES DE MI PLAN</h3>
     </div>
 
     <div class="popup__info">
-        <p><span>PLAN ACTUAL: </span>GRATUITO</p>
+        <p><span>PLAN ACTUAL: </span>{{plan.planName}}</p>
+    </div>
+
+    <div class="popup__info">
+      <p><span>ESTADO: </span>{{plan.status}}</p>
     </div>
 
     <div class="popup__btns">
-        <button class="button">
-            CAMBIAR A PLAN PREMIUM
-          </button>
-          <button class="button button_gris">
-            CERRAR
-          </button>
+        <button class="button" [routerLink]="['/subscribe']">
+          CAMBIAR A PLAN PREMIUM
+        </button>
+        <button  mat-dialog-close="data.animal" cdkFocusInitial class="button button_gris">
+          CERRAR
+        </button>
     </div>
 </div>
