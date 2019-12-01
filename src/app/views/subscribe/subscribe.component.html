@@ -5,9 +5,10 @@
     <mat-card-content>
         Esta es una funcionalidad premium y actualmente tu cuenta es grauita. Por favor seleccione la tarjeta a la cual se le hará el cargo de la subscripción mensual de $129.00 MXN. (Podrás cancelar la subscripción en el momento que tú desees) 
 
-        <app-select-card></app-select-card>
+        <app-select-card (cardSelected)="onCardSelected($event)"></app-select-card>
+        <button (click)="onPayButtonClick()" mat-flat-button color="primary" style="width: 100%;">INICIAR SUBSCRIPCION</button>
         <hr>
-        <app-checkout [amount]="2000" description="Subscribirse a premium"></app-checkout>
+        <app-checkout [amount]="12900" description="Subscribirse a premium"></app-checkout>
         <button mat-flat-button color="warn" style="width: 100%;" [routerLink]="['/dashboard']">
             CANCELAR
         </button>

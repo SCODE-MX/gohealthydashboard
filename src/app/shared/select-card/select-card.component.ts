@@ -12,8 +12,7 @@ export class SelectCardComponent implements OnInit {
   @Output() cardSelected = new EventEmitter<string>();
 
   public cards$: any;
-  public selectedCard: any;
-  public confirmation: any;
+  public selectedCard: string;
 
   constructor(private stripe: StripeService) { }
 
@@ -24,16 +23,5 @@ export class SelectCardComponent implements OnInit {
   public onSelectionChange(event: MatSelectionListChange) {
     this.selectedCard = event.option.value;
     this.cardSelected.emit(this.selectedCard);
-
   }
-
-  public async onPayButtonClick() {
-    if (!this.selectedCard) {
-      alert('Elija una tarjeta para continuar');
-      return;
-    }
-    this.confirmation = await this.stripe.createCharge(this.selectedCard, 2000).toPromise();
-    console.log('this.confirmation :', this.confirmation);
-  }
-
 }

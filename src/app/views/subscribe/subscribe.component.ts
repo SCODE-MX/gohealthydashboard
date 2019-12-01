@@ -1,3 +1,5 @@
+import { StripeService } from 'src/app/services/stripe.service';
+
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,10 +8,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./subscribe.component.scss']
 })
 export class SubscribeComponent implements OnInit {
+  private selectedCard: string;
+  private confirmation: any;
 
-  constructor() { }
+  constructor(private stripe: StripeService) { }
 
   ngOnInit() {
+  }
+
+  public onCardSelected(selectedCard: string): void {
+    this.selectedCard = selectedCard;
+  }
+
+  public async onPayButtonClick() {
+    if (!this.selectedCard) {
+      alert('Elija una tarjeta para continuar');
+      return;
+    }
+    this.confirmation = await this.stripe.createCharge(this.selectedCard, 12900).toPromise();
+    console.log('this.confirmation :', this.confirmation);
   }
 
 }

@@ -8,15 +8,11 @@
                         <mat-radio-button color="primary" [value]="card.id" (change)="selection = $event.value">
                         </mat-radio-button>
                     </mat-icon>
-                    <!-- <img  src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="Photo of a Shiba Inu"> -->
-
                     <h4 mat-line>Terminación **** {{ card.card.last4 }}</h4> 
                     <p mat-line> {{ card.card.brand }}</p> 
-                        <!-- <mat-icon mat-list-icon>folder</mat-icon> -->
                 </mat-list-option>
             </mat-radio-group>
         </mat-selection-list> 
-        <button (click)="onPayButtonClick()" mat-flat-button color="primary" style="width: 100%;">INICIAR SUBSCRIPCION</button>
     </ng-container>
     <ng-template #noCards>
         No tiene tarjetas registradas
