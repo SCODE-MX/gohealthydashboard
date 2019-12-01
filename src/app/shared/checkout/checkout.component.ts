@@ -29,13 +29,18 @@ export class CheckoutComponent implements OnInit {
   ngOnInit() {
     this.handler = StripeCheckout.configure({
       key: environment.stripe.key,
-      image: './assets/donutLogo.jpg',
-      locale: 'auto',
+      image: './assets/premium.jpg',
+      locale: 'mx',
+      allowRememberMe: false,
       source: async (source) => {
         this.loading = true;
         const user = await this.stripe.getUser();
+
+
         const stripeCreateCharge = this.functions.httpsCallable('stripeCreateCharge');
         console.log('source :', source);
+
+
         this.confirmation = await stripeCreateCharge({
           source: source.id,
           uid: user.uid,
@@ -50,7 +55,7 @@ export class CheckoutComponent implements OnInit {
   async checkout(e) {
     const user = await this.stripe.getUser();
     this.handler.open({
-      name: 'Subscribete a premium',
+      name: 'Plan premium',
       description: this.description,
       amount: this.amount,
       email: user.email,

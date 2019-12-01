@@ -1,15 +1,20 @@
-<h1>Subscribe to Premium</h1>
+<mat-card class="example-card">
+    <mat-card-header>
+        <mat-card-title>Subscribirse a premium</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        Esta es una funcionalidad premium y actualmente tu cuenta es grauita. Por favor seleccione la tarjeta a la cual se le hará el cargo de la subscripción mensual de $129.00 MXN. (Podrás cancelar la subscripción en el momento que tú desees) 
 
-<hr>
+        <app-select-card></app-select-card>
+        <hr>
+        <app-checkout [amount]="2000" description="Subscribirse a premium"></app-checkout>
+        <button mat-flat-button color="warn" style="width: 100%;" [routerLink]="['/dashboard']">
+            CANCELAR
+        </button>
+    </mat-card-content>
 
-<div class="card"> 
-    <div class="card-image">
-        <img src="./assets/donuts.jpg" width="400">
-    </div>
-    <div class="card-content">
-        <!-- <app-checkout [amount]="2000" description="Subscribe to premium"></app-checkout> -->
-        <!-- <app-elements [amount]="2000" description="People Meat"></app-elements> -->    
-    </div>
-</div>
 
-<!-- <app-select-card></app-select-card> -->
+</mat-card>
+
+
+

@@ -1,8 +1,6 @@
     
 <ng-container *ngIf="cards$ | async as cards; else loading">
     <ng-container *ngIf="cards.length; else noCards">
-        Or pay with one of your saved cards:
-
         <mat-selection-list (selectionChange)="onSelectionChange($event)">
             <mat-radio-group [(ngModel)]="selectedCard">
                 <mat-list-option *ngFor="let card of cards; let i = index " [value]="card.id">
@@ -12,19 +10,19 @@
                     </mat-icon>
                     <!-- <img  src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="Photo of a Shiba Inu"> -->
 
-                    <h4 mat-line>Ending in **** {{ card.card.last4 }}</h4> 
+                    <h4 mat-line>Terminación **** {{ card.card.last4 }}</h4> 
                     <p mat-line> {{ card.card.brand }}</p> 
                         <!-- <mat-icon mat-list-icon>folder</mat-icon> -->
                 </mat-list-option>
             </mat-radio-group>
         </mat-selection-list> 
-        <button (click)="onPayButtonClick()" mat-flat-button color="accent">Pay with chosen card</button>
+        <button (click)="onPayButtonClick()" mat-flat-button color="primary" style="width: 100%;">INICIAR SUBSCRIPCION</button>
     </ng-container>
     <ng-template #noCards>
-        You don't have a registered card
+        No tiene tarjetas registradas
     </ng-template>
 </ng-container>
 
 <ng-template #loading>
-    Loading...
+    Cargando...
 </ng-template>

@@ -29,7 +29,7 @@ export class SelectCardComponent implements OnInit {
 
   public async onPayButtonClick() {
     if (!this.selectedCard) {
-      alert('Please choose a payment method');
+      alert('Elija una tarjeta para continuar');
       return;
     }
     this.confirmation = await this.stripe.createCharge(this.selectedCard, 2000).toPromise();
