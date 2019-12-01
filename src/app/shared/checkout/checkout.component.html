@@ -1,0 +1,8 @@
+<button mat-flat-button color="accent" (click)="checkout($event)">
+  Buy for ${{ amount / 100 }}.00 
+</button>
+
+<hr>
+
+<div *ngIf="loading" class="notification is-info">Loading...</div>
+<pre *ngIf="confirmation" style="max-width: 500px;">{{ confirmation | json }}</pre>
