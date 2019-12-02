@@ -24,4 +24,7 @@ export class PopupComponent {
   ) {
     this.user = this.stripe.user$;
   }
+
+  public onCancelSubscription = async (subscriptionId: string) => this.stripe.cancelSubscription(subscriptionId);
+
 }

@@ -13,7 +13,7 @@
 
     <div class="popup__btns">
       <ng-container *ngIf="plan.planName == 'PREMIUM' && plan.status == 'ACTIVO'; else subscribe">
-        <button class="button">
+        <button class="button" (click)="onCancelSubscription(plan.subscriptionId)">
           CANCELAR MI PLAN
         </button>
       </ng-container>

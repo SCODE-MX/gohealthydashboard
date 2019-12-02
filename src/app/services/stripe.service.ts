@@ -27,6 +27,7 @@ export class StripeService {
       return {
         planName,
         status,
+        subscriptionId: user.subId,
       };
     };
     // 4mu5enOwKGUSVeJyT2Gw071enyF3
@@ -45,4 +46,7 @@ export class StripeService {
   public getSources = () => this.functions.httpsCallable('stripeGetSources')({});
 
   public subscribeToPlan = (plan: string, source: string) => this.functions.httpsCallable('stripeCreateSubscription')({plan, source});
+
+  public cancelSubscription = (subscriptionId: string) => this.functions.httpsCallable('stripeCancelSubscription')({plan: subscriptionId});
+
 }
