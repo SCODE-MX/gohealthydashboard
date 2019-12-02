@@ -32,18 +32,7 @@ export class CheckoutComponent implements OnInit {
       allowRememberMe: false,
       source: async (source) => {
         this.loading = true;
-        const user = await this.stripe.getUser();
-
-
-        const stripeCreateCharge = this.functions.httpsCallable('stripeCreateCharge');
-        console.log('source :', source);
-
-
-        this.confirmation = await stripeCreateCharge({
-          source: source.id,
-          uid: user.uid,
-          amount: this.amount,
-        }).toPromise();
+        this.confirmation = await this.stripe.subscribeToPlan('plan_FmpGElUUFBzVry',source.id).toPromise();
         this.loading = false;
       }
     });
