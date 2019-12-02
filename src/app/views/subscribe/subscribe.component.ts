@@ -25,7 +25,7 @@ export class SubscribeComponent implements OnInit {
       alert('Elija una tarjeta para continuar');
       return;
     }
-    this.confirmation = await this.stripe.createCharge(this.selectedCard, 12900).toPromise();
+    this.confirmation = await this.stripe.subscribeToPlan('plan_FmpGElUUFBzVry', this.selectedCard).toPromise();
     console.log('this.confirmation :', this.confirmation);
   }
 

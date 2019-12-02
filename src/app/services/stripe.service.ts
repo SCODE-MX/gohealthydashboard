@@ -36,12 +36,6 @@ export class StripeService {
 
   }
 
-  // public async getPlan(planId: string) {
-  //   const fun = this.functions.httpsCallable('stripeGetSubscriptions');
-  //   const confirmation = await fun().toPromise();
-  //   console.log('confirmation :', confirmation);
-  // }
-
   async getUser() {
     return this.afAuth.authState.pipe(first()).toPromise();
   }
@@ -50,8 +44,5 @@ export class StripeService {
 
   public getSources = () => this.functions.httpsCallable('stripeGetSources')({});
 
-
-  // public getUserData(userId: string) {
-  //   return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
-  // }
+  public subscribeToPlan = (plan: string, source: string) => this.functions.httpsCallable('stripeCreateSubscription')({plan, source});
 }
