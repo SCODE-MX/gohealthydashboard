@@ -1,10 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { DatabaseService } from 'src/app/services/database.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DirectorioI, ChartType } from '../../models/interfaces/general.interfaces';
-import { normalizeString } from '../../models/functions/general.functions';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+/// <reference types="stripe-checkout"/>
 import { ToastrService } from 'ngx-toastr';
+import { DatabaseService } from 'src/app/services/database.service';
+import { StripeService } from 'src/app/services/stripe.service';
+import { NoCardPopupComponent } from 'src/app/shared/no-card-popup/no-card-popup.component';
+import { environment } from 'src/environments/environment';
+
+import { Component, HostListener, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { normalizeString } from '../../models/functions/general.functions';
+import { ChartType, DirectorioI } from '../../models/interfaces/general.interfaces';
+
+declare var StripeCheckout: StripeCheckoutStatic;
 
 @Component({
   selector: 'app-detalle',
@@ -29,13 +38,19 @@ export class DetalleComponent implements OnInit {
   tempRef: string[];
   imgValid = true;
 
+  handler: StripeCheckoutHandler;
+  loading = false;
+  confirmation: any;
+
   constructor(
     // private storage: StorageService,
+    private stripe: StripeService,
     private service: DatabaseService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     public router: Router,
     private toastr: ToastrService,
+    public dialog: MatDialog
     ) {
       this.form = this.fb.group({
         nombre: ['', Validators.required],
@@ -75,6 +90,17 @@ export class DetalleComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.handler = StripeCheckout.configure({
+      key: environment.stripe.key,
+      locale: 'es',
+      currency: 'mxn',
+      allowRememberMe: false,
+      source: async (source) => {
+        this.loading = true;
+        this.confirmation = await this.stripe.subscribeToPlan('plan_FmpGElUUFBzVry', source.id).toPromise();
+        this.loading = false;
+      }
+    });
   }
   added(event) {
     console.log('from added', event);
@@ -150,5 +176,46 @@ export class DetalleComponent implements OnInit {
         }
     }
     return arrayChatType;
-}
+  }
+
+  onActivateAd(event) {
+    // Check if we need to add a credit card
+
+    // Open dialog if user doesn't have registered a card
+    this.openNoCardPopUp(event);
+  }
+
+  openNoCardPopUp(event): void {
+    const dialogRef = this.dialog.open(NoCardPopupComponent, {
+      width: '400px',
+      data: { }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log('result :', result);
+      if (result === 'addCard') {
+        this.checkout(event);
+      }
+    });
+  }
+
+  // Open the checkout handler
+  async checkout(event) {
+    const user = await this.stripe.getUser();
+    this.handler.open({
+      name: 'Registro de tarjeta',
+      description: 'Ingrese los datos su tarjeta',
+      email: user.email,
+      panelLabel: 'Agregar Tarjeta'
+    });
+    event.preventDefault();
+  }
+
+  // Close on navigate
+  @HostListener('window:popstate')
+  onPopState() {
+    this.handler.close();
+  }
+
 }
