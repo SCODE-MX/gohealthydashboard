@@ -5,7 +5,7 @@
     <button *ngIf="!data.visible" (click)="onActivateAd($event)" class="button detalle__button-active" style="width: 200px;">
       ACTIVAR
     </button>
-    <button *ngIf="data.visible" class="button detalle__button-defuse" style="width: 200px;">
+    <button *ngIf="data.visible" (click)="onDeactivateAd()"class="button detalle__button-defuse" style="width: 200px;">
       DESACTIVAR
     </button>
     <div class="detalle__estadisticas">

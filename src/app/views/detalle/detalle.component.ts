@@ -1,8 +1,10 @@
 /// <reference types="stripe-checkout"/>
 import { ToastrService } from 'ngx-toastr';
+import { take } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/services/database.service';
 import { StripeService } from 'src/app/services/stripe.service';
 import { NoCardPopupComponent } from 'src/app/shared/no-card-popup/no-card-popup.component';
+import { SubscribePopupComponent } from 'src/app/shared/subscribe-popup/subscribe-popup.component';
 import { environment } from 'src/environments/environment';
 
 import { Component, HostListener, OnInit } from '@angular/core';
@@ -178,11 +180,43 @@ export class DetalleComponent implements OnInit {
     return arrayChatType;
   }
 
-  onActivateAd(event) {
+  async setAdVisibleState(value: boolean): Promise<void> {
+    try {
+      const {estado, id} = this.data;
+      // TODO: Add loader while performing the update
+      await this.service.update(`Directorio/Estados/${normalizeString(estado)}/`, {visible: value}, id);
+      this.data.visible = value;
+    } catch (error) {
+      alert('Hubo un error con la base de datos');
+    }
+  }
+
+  onDeactivateAd() {
+    return this.setAdVisibleState(false);
+  }
+
+  async onActivateAd(event) {
     // Check if we need to add a credit card
+    const plan = await this.stripe.user$.pipe(take(1)).toPromise();
+    if (plan.status = 'ACTIVO') {
+      return this.setAdVisibleState(true);
+    }
 
     // Open dialog if user doesn't have registered a card
-    this.openNoCardPopUp(event);
+    // this.openNoCardPopUp(event);
+    this.openSubscribePopUp(event);
+  }
+
+  openSubscribePopUp(event): void {
+    const dialogRef = this.dialog.open(SubscribePopupComponent, {
+      width: '400px',
+      data: { }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log('result :', result);
+    });
   }
 
   openNoCardPopUp(event): void {
@@ -196,6 +230,7 @@ export class DetalleComponent implements OnInit {
       console.log('result :', result);
       if (result === 'addCard') {
         this.checkout(event);
+        this.checkout(event);
       }
     });
   }
@@ -203,6 +238,7 @@ export class DetalleComponent implements OnInit {
   // Open the checkout handler
   async checkout(event) {
     const user = await this.stripe.getUser();
+    console.log('open');
     this.handler.open({
       name: 'Registro de tarjeta',
       description: 'Ingrese los datos su tarjeta',
