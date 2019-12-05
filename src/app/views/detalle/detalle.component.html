@@ -1,6 +1,6 @@
 <div *ngIf="data" class="detalle container">
   <button (click)="router.navigate(['blog']);">
-    <i class="fas fa-chevron-left" style="font-size: 30px; position: absolute; left: 20px; top: 10px; z-index: 9000000; color: white; cursor: pointer;"></i>
+    <i class="fas fa-chevron-left" style="font-size: 30px; position: absolute; left: 20px; top: 10px; z-index: 2000; color: white; cursor: pointer;"></i>
   </button>
   <button *ngIf="!data.visible" (click)="onActivateAd($event)" class="button detalle__button-active" style="width: 200px;">
     ACTIVAR
@@ -123,3 +123,4 @@
     </div>  
   </div>
 </div>
+<app-loading-overlay [loading]="loading"></app-loading-overlay>

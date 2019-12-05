@@ -1,3 +1,4 @@
+import { NgxLoadingModule } from 'ngx-loading';
 import { ToastrModule } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 
@@ -18,6 +19,7 @@ import { MaterialModule } from './material.module';
 import { NoCardPopupComponent } from './shared/no-card-popup/no-card-popup.component';
 import { PopupComponent } from './shared/popup/popup.component';
 import { SharedModule } from './shared/shared.module';
+import { SubscribePopupComponent } from './shared/subscribe-popup/subscribe-popup.component';
 import { SubscribeComponent } from './views/subscribe/subscribe.component';
 
 @NgModule({
@@ -34,6 +36,7 @@ import { SubscribeComponent } from './views/subscribe/subscribe.component';
     BrowserAnimationsModule,
     MaterialModule,
     ToastrModule.forRoot(),
+    NgxLoadingModule.forRoot({}),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireFunctionsModule,
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
@@ -42,7 +45,8 @@ import { SubscribeComponent } from './views/subscribe/subscribe.component';
   ],
   entryComponents: [
     PopupComponent,
-    NoCardPopupComponent
+    NoCardPopupComponent,
+    SubscribePopupComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

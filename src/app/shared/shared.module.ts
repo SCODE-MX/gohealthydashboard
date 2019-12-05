@@ -1,4 +1,5 @@
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { NgxLoadingModule } from 'ngx-loading';
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -9,9 +10,12 @@ import { CardComponent } from './card/card.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { DeleteImageComponent } from './delete-image/delete-image.component';
 import { DropzoneComponent } from './dropzone/dropzone.component';
+import { LoadingOverlayComponent } from './loading-overlay/loading-overlay.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { NoCardPopupComponent } from './no-card-popup/no-card-popup.component';
 import { PopupComponent } from './popup/popup.component';
 import { SelectCardComponent } from './select-card/select-card.component';
+import { SubscribePopupComponent } from './subscribe-popup/subscribe-popup.component';
 
 @NgModule({
   declarations: [
@@ -21,13 +25,17 @@ import { SelectCardComponent } from './select-card/select-card.component';
     SelectCardComponent,
     CheckoutComponent,
     DropzoneComponent,
-    DeleteImageComponent
+    DeleteImageComponent,
+    NoCardPopupComponent,
+    SubscribePopupComponent,
+    LoadingOverlayComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
     RouterModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    NgxLoadingModule,
   ],
   exports: [
     NavbarComponent,
@@ -35,7 +43,9 @@ import { SelectCardComponent } from './select-card/select-card.component';
     PopupComponent,
     CheckoutComponent,
     SelectCardComponent,
-    DropzoneComponent
+    DropzoneComponent,
+    NgxLoadingModule,
+    LoadingOverlayComponent
   ]
 })
 export class SharedModule { }
