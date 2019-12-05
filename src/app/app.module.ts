@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { MaterialModule } from './material.module';
+import { NoCardPopupComponent } from './shared/no-card-popup/no-card-popup.component';
 import { PopupComponent } from './shared/popup/popup.component';
 import { SharedModule } from './shared/shared.module';
 import { SubscribeComponent } from './views/subscribe/subscribe.component';
@@ -40,7 +41,8 @@ import { SubscribeComponent } from './views/subscribe/subscribe.component';
     AngularFireStorageModule // imports firebase/storage only needed for storage features
   ],
   entryComponents: [
-    PopupComponent
+    PopupComponent,
+    NoCardPopupComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
