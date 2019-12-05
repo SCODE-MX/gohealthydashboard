@@ -1,0 +1,9 @@
+<div class="delete__container" *ngIf="url; else loading">
+    <img class="delete__img" [src]="url" alt="">
+    <div class="delete__overlay"></div>
+    <div class="delete__button"><button mat-icon-button  color="warn" (click)="eliminar()"><mat-icon class="material-icons" style="font-size: 30px;">delete</mat-icon></button></div>
+</div>
+        
+<ng-template #loading>
+Cargando...
+</ng-template>
