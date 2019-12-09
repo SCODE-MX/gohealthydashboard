@@ -6,7 +6,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminGuardService } from './auth/admin-guard.service';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { SubscribeComponent } from './views/subscribe/subscribe.component';
 
 const routes: Routes = [
     {
@@ -33,11 +32,6 @@ const routes: Routes = [
         }
       ]
     }, {
-      path: 'subscribe',
-      component: SubscribeComponent,
-      canActivate: [AdminGuardService],
-    },
-    {
       path: '**',
       redirectTo: 'dashboard'
     }

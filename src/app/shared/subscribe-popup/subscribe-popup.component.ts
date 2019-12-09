@@ -1,23 +1,34 @@
+
+
+
 import { StripeService } from 'src/app/services/stripe.service';
 
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material';
+
+declare var StripeCheckout: StripeCheckoutStatic;
 
 @Component({
-  selector: 'app-subscribe',
-  templateUrl: './subscribe.component.html',
-  styleUrls: ['./subscribe.component.scss']
+  selector: 'app-subscribe-popup',
+  templateUrl: './subscribe-popup.component.html',
+  styleUrls: ['./subscribe-popup.component.scss']
 })
-export class SubscribeComponent implements OnInit {
+export class SubscribePopupComponent implements OnInit {
   private selectedCard: string;
   private confirmation: any;
+  public handler: StripeCheckoutHandler;
 
-  constructor(private stripe: StripeService) { }
+  constructor(public dialogRef: MatDialogRef<SubscribePopupComponent>, private stripe: StripeService) { }
 
   ngOnInit() {
   }
 
   public onCardSelected(selectedCard: string): void {
     this.selectedCard = selectedCard;
+  }
+
+  public onAddCardButtonClick(event) {
+    this.stripe.checkout.open(event);
   }
 
   public async onPayButtonClick() {

@@ -20,14 +20,12 @@ import { NoCardPopupComponent } from './shared/no-card-popup/no-card-popup.compo
 import { PopupComponent } from './shared/popup/popup.component';
 import { SharedModule } from './shared/shared.module';
 import { SubscribePopupComponent } from './shared/subscribe-popup/subscribe-popup.component';
-import { SubscribeComponent } from './views/subscribe/subscribe.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthLayoutComponent,
-    AdminLayoutComponent,
-    SubscribeComponent
+    AdminLayoutComponent
   ],
   imports: [
     BrowserModule,

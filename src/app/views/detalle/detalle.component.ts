@@ -1,6 +1,6 @@
 /// <reference types="stripe-checkout"/>
 import { ToastrService } from 'ngx-toastr';
-import { take } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/services/database.service';
 import { StripeService } from 'src/app/services/stripe.service';
 import { NoCardPopupComponent } from 'src/app/shared/no-card-popup/no-card-popup.component';
@@ -99,7 +99,7 @@ export class DetalleComponent implements OnInit {
       allowRememberMe: false,
       source: async (source) => {
         this.loading = true;
-        this.confirmation = await this.stripe.subscribeToPlan('plan_FmpGElUUFBzVry', source.id).toPromise();
+        this.confirmation = await this.stripe.attachSource(source.id).toPromise();
         this.loading = false;
       }
     });
@@ -173,9 +173,9 @@ export class DetalleComponent implements OnInit {
   arrChartType(obj: Object, name: string): any[] {
     const arrayChatType: any[] = [];
     for (const key in obj) {
-        if (obj.hasOwnProperty(key) && key.includes(name)) {
-            arrayChatType.push({name: key.slice(name.length, key.length).replace('_','-'), value: obj[key]})
-        }
+      if (obj.hasOwnProperty(key) && key.includes(name)) {
+        arrayChatType.push({name: key.slice(name.length, key.length).replace('_', '-'), value: obj[key]});
+      }
     }
     return arrayChatType;
   }
@@ -197,13 +197,21 @@ export class DetalleComponent implements OnInit {
 
   async onActivateAd(event) {
     // Check if we need to add a credit card
-    const plan = await this.stripe.user$.pipe(take(1)).toPromise();
-    if (plan.status = 'ACTIVO') {
-      return this.setAdVisibleState(true);
-    }
+    // const plan = await this.stripe.user$.pipe(take(1)).toPromise();
+    // if (plan.status = 'ACTIVO') {
+    //   return this.setAdVisibleState(true);
+    // }
 
     // Open dialog if user doesn't have registered a card
     // this.openNoCardPopUp(event);
+    this.loading = true;
+    const cards = await this.stripe.getSources().pipe(first()).toPromise();
+    this.loading = false;
+
+    if (cards.length === 0) {
+      this.openNoCardPopUp(event);
+    }
+    console.log('cards :', cards);
     this.openSubscribePopUp(event);
   }
 
@@ -230,7 +238,6 @@ export class DetalleComponent implements OnInit {
       console.log('result :', result);
       if (result === 'addCard') {
         this.checkout(event);
-        this.checkout(event);
       }
     });
   }
@@ -238,7 +245,6 @@ export class DetalleComponent implements OnInit {
   // Open the checkout handler
   async checkout(event) {
     const user = await this.stripe.getUser();
-    console.log('open');
     this.handler.open({
       name: 'Registro de tarjeta',
       description: 'Ingrese los datos su tarjeta',
