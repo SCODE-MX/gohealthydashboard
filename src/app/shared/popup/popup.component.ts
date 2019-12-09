@@ -13,7 +13,6 @@ export interface DialogData {
   styleUrls: ['./popup.component.scss']
 })
 export class PopupComponent {
-
   public user;
   public something;
 

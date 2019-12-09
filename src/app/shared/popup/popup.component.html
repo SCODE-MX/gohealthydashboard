@@ -18,11 +18,11 @@
         </button>
       </ng-container>
       <ng-template #subscribe>
-        <button class="button" [routerLink]="['/subscribe']">
+        <button mat-dialog-close="changeToPremium" class="button">
           CAMBIAR A PLAN PREMIUM
         </button>
       </ng-template>
-      <button  mat-dialog-close="data.animal" cdkFocusInitial class="button button_gris">
+      <button  mat-dialog-close cdkFocusInitial class="button button_gris">
         CERRAR
       </button>
     </div>
