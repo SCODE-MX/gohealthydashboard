@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { MatSelectionListChange } from '@angular/material/list';
 
 import { StripeService } from '../../services/stripe.service';
 
@@ -20,8 +19,12 @@ export class SelectCardComponent implements OnInit {
     this.cards$ = this.stripe.getSources();
   }
 
-  public onSelectionChange(event: MatSelectionListChange) {
-    this.selectedCard = event.option.value;
+  public onSelectionChange() {
     this.cardSelected.emit(this.selectedCard);
   }
+
+  public onDeleteCard(cardId: string) {
+    this.stripe.dettachSource(cardId);
+  }
+
 }
