@@ -1,13 +1,13 @@
 /// <reference types="stripe-checkout"/>
 import { ToastrService } from 'ngx-toastr';
-import { first } from 'rxjs/operators';
+import { first, take } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/services/database.service';
 import { StripeService } from 'src/app/services/stripe.service';
 import { NoCardPopupComponent } from 'src/app/shared/no-card-popup/no-card-popup.component';
 import { SubscribePopupComponent } from 'src/app/shared/subscribe-popup/subscribe-popup.component';
 import { environment } from 'src/environments/environment';
 
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,7 +22,7 @@ declare var StripeCheckout: StripeCheckoutStatic;
   templateUrl: './detalle.component.html',
   styleUrls: ['./detalle.component.scss']
 })
-export class DetalleComponent implements OnInit {
+export class DetalleComponent {
   data: any;
   form: FormGroup;
   visitas: any;
@@ -40,9 +40,8 @@ export class DetalleComponent implements OnInit {
   tempRef: string[];
   imgValid = true;
 
-  handler: StripeCheckoutHandler;
-  loading = false;
-  confirmation: any;
+  public loading = false;
+  private handler: StripeCheckoutHandler;
 
   constructor(
     // private storage: StorageService,
@@ -91,19 +90,6 @@ export class DetalleComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
-    this.handler = StripeCheckout.configure({
-      key: environment.stripe.key,
-      locale: 'es',
-      currency: 'mxn',
-      allowRememberMe: false,
-      source: async (source) => {
-        this.loading = true;
-        this.confirmation = await this.stripe.attachSource(source.id).toPromise();
-        this.loading = false;
-      }
-    });
-  }
   added(event) {
     console.log('from added', event);
     this.newImg = event;
@@ -183,75 +169,109 @@ export class DetalleComponent implements OnInit {
   async setAdVisibleState(value: boolean): Promise<void> {
     try {
       const {estado, id} = this.data;
-      // TODO: Add loader while performing the update
+      this.loading = true;
       await this.service.update(`Directorio/Estados/${normalizeString(estado)}/`, {visible: value}, id);
+
+      // If request was successful
       this.data.visible = value;
+      const activeSring = value ? 'activado' : 'desactivado';
+      this.toastr.success(`Su anuncio ha sido correctamente ${activeSring}`, 'Actualización');
     } catch (error) {
-      alert('Hubo un error con la base de datos');
+      this.toastr.error('Hubo un error con la base de datos', 'Error');
+    } finally {
+      this.loading = false;
     }
   }
 
-  onDeactivateAd() {
+  onDeactivateAd(): Promise<void> {
     return this.setAdVisibleState(false);
   }
 
   async onActivateAd(event) {
-    // Check if we need to add a credit card
-    // const plan = await this.stripe.user$.pipe(take(1)).toPromise();
-    // if (plan.status = 'ACTIVO') {
-    //   return this.setAdVisibleState(true);
-    // }
+    const plan = await this.stripe.user$.pipe(take(1)).toPromise();
+    if (plan.status === 'ACTIVO') {
+      return this.setAdVisibleState(true);
+    }
 
     // Open dialog if user doesn't have registered a card
-    // this.openNoCardPopUp(event);
     this.loading = true;
-    const cards = await this.stripe.getSources().pipe(first()).toPromise();
+    let cards = await this.stripe.getSources().pipe(first()).toPromise();
     this.loading = false;
 
     if (cards.length === 0) {
-      this.openNoCardPopUp(event);
+      const customer = await this.openNoCardPopUp(event);
+      if (!customer) {
+        return;
+      }
+      cards = customer.sources.data;
     }
-    console.log('cards :', cards);
-    this.openSubscribePopUp(event);
+
+    await this.openSubscribePopUp(cards);
   }
 
-  openSubscribePopUp(event): void {
+  private async openSubscribePopUp(cards: any[]): Promise<void> {
     const dialogRef = this.dialog.open(SubscribePopupComponent, {
       width: '400px',
-      data: { }
+      data: { cards }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log('result :', result);
-    });
+    const success = await dialogRef.afterClosed().toPromise();
+    if (success) {
+      this.toastr.success('Se ha actualizado su plan', 'Actualización');
+    }
   }
 
-  openNoCardPopUp(event): void {
+  private async openNoCardPopUp(event): Promise<any> {
     const dialogRef = this.dialog.open(NoCardPopupComponent, {
       width: '400px',
       data: { }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log('result :', result);
-      if (result === 'addCard') {
-        this.checkout(event);
+    const result = await dialogRef.afterClosed().toPromise();
+
+    if (result === 'addCard') {
+      try {
+        const customer = await this.checkout(event);
+        return customer;
+      } catch (error) {
+        // Something went wrong while adding card.
+        return false;
       }
-    });
+    }
+    return false;
   }
 
   // Open the checkout handler
-  async checkout(event) {
+  private async checkout(event) {
     const user = await this.stripe.getUser();
-    this.handler.open({
-      name: 'Registro de tarjeta',
-      description: 'Ingrese los datos su tarjeta',
-      email: user.email,
-      panelLabel: 'Agregar Tarjeta'
+
+    return new Promise((resolve, reject) => {
+      this.handler = StripeCheckout.configure({
+        key: environment.stripe.key,
+        locale: 'es',
+        currency: 'mxn',
+        allowRememberMe: false,
+        source: async (source) => {
+          try {
+            this.loading = true;
+            const customer = await this.stripe.attachSource(source.id).toPromise();
+            resolve(customer);
+          } catch (error) {
+            reject(error);
+          } finally {
+            this.loading = false;
+          }
+        }
+      });
+
+      this.handler.open({
+        name: 'Registro de tarjeta',
+        description: 'Ingrese los datos su tarjeta',
+        email: user.email,
+        panelLabel: 'Agregar Tarjeta'
+      });
+      event.preventDefault();
     });
-    event.preventDefault();
   }
 
   // Close on navigate
