@@ -18,10 +18,11 @@
             <div class="navbar__opciones-menu">
                     <ul>
                         <li><a href="" (click)= 'auth.logout()'><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
-                        <li (click)="openDialog()"><p><i class="fas fa-award"></i> Ver Mi plan</p></li>
+                        <li (click)="openCurrentPlanDialog($event)"><p><i class="fas fa-award"></i> Ver Mi plan</p></li>
                     </ul>
                 </div>
                 
         </div>
     </div>
 </div>
+<app-loading-overlay [loading]="loading"></app-loading-overlay>
