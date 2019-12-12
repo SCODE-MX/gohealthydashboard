@@ -1,10 +1,12 @@
 
 
 
+import { ToastrService } from 'ngx-toastr';
 import { StripeService } from 'src/app/services/stripe.service';
+import { environment } from 'src/environments/environment';
 
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 declare var StripeCheckout: StripeCheckoutStatic;
 
@@ -15,10 +17,18 @@ declare var StripeCheckout: StripeCheckoutStatic;
 })
 export class SubscribePopupComponent implements OnInit {
   private selectedCard: string;
-  private confirmation: any;
+  public loading = false;
   public handler: StripeCheckoutHandler;
+  public cards: any[];
 
-  constructor(public dialogRef: MatDialogRef<SubscribePopupComponent>, private stripe: StripeService) { }
+  constructor(
+    public dialogRef: MatDialogRef<SubscribePopupComponent>,
+    private stripe: StripeService,
+    private toastr: ToastrService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.cards = data.cards;
+  }
 
   ngOnInit() {
   }
@@ -27,8 +37,45 @@ export class SubscribePopupComponent implements OnInit {
     this.selectedCard = selectedCard;
   }
 
-  public onAddCardButtonClick(event) {
-    this.stripe.checkout.open(event);
+  public async onAddCardButtonClick(event) {
+    try {
+      const customer: any = await this.checkout(event);
+      this.cards = customer.sources.data;
+    } catch (error) {
+      this.toastr.error('No se pudo agregar la tarjeta');
+    }
+  }
+
+  private async checkout(event) {
+    const user = await this.stripe.getUser();
+
+    return new Promise((resolve, reject) => {
+      const handler = StripeCheckout.configure({
+        key: environment.stripe.key,
+        locale: 'es',
+        currency: 'mxn',
+        allowRememberMe: false,
+        source: async (source) => {
+          try {
+            this.loading = true;
+            const customer = await this.stripe.attachSource(source.id).toPromise();
+            resolve(customer);
+          } catch (error) {
+            reject(error);
+          } finally {
+            this.loading = false;
+          }
+        }
+      });
+
+      handler.open({
+        name: 'Registro de tarjeta',
+        description: 'Ingrese los datos su tarjeta',
+        email: user.email,
+        panelLabel: 'Agregar Tarjeta'
+      });
+      event.preventDefault();
+    });
   }
 
   public async onPayButtonClick() {
@@ -36,8 +83,11 @@ export class SubscribePopupComponent implements OnInit {
       alert('Elija una tarjeta para continuar');
       return;
     }
-    this.confirmation = await this.stripe.subscribeToPlan('plan_FmpGElUUFBzVry', this.selectedCard).toPromise();
-    console.log('this.confirmation :', this.confirmation);
+    this.loading = true;
+    const confirmation = await this.stripe.subscribeToPlan('plan_FmpGElUUFBzVry', this.selectedCard).toPromise();
+    this.loading = false;
+
+    this.dialogRef.close(confirmation);
   }
 
 }
