@@ -30,8 +30,8 @@ export class StripeService {
     );
 
     const userMapper = user => {
-      const planName = user.planId ? 'PREMIUM' : 'GRATUITO';
       const status = user.stateSub === 'inactive' ? 'INACTIVO' : 'ACTIVO';
+      const planName = user.stateSub === 'ACTIVO' ? 'PREMIUM' : 'GRATUITO';
       return {
         planName,
         status,
