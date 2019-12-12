@@ -1,29 +1,24 @@
     
-<ng-container *ngIf="cards$ | async as cards; else loading">
-    <ng-container *ngIf="cards.length; else noCards">
-        <mat-list>
-            <mat-radio-group [(ngModel)]="selectedCard" (change)="onSelectionChange()">
-                <mat-list-item *ngFor="let card of cards; let i = index">
-                    <mat-icon mat-list-icon>
-                        <mat-radio-button color="primary" [value]="card.id" (change)="selection = $event.value">
-                        </mat-radio-button>
-                    </mat-icon>
-                    <h4 mat-line>
-                        ...{{ card.card.last4 }} ({{card.card.exp_month}}/{{card.card.exp_year}})
-                        <button mat-button color="warn" (click)="onDeleteCard(card.id)">
-                            ELIMINAR
-                        </button>
-                    </h4> 
-                    <!-- <p mat-line> {{ card.card.brand }}</p>  -->
-                </mat-list-item>
-            </mat-radio-group>
-        </mat-list> 
-    </ng-container>
-    <ng-template #noCards>
-        No tiene tarjetas registradas
-    </ng-template>
+<ng-container *ngIf="cards.length; else noCards">
+    <mat-list>
+        <mat-radio-group [(ngModel)]="selectedCard" (change)="onSelectionChange()">
+            <mat-list-item *ngFor="let card of cards; let i = index">
+                <mat-icon mat-list-icon>
+                    <mat-radio-button color="primary" [value]="card.id" (change)="selection = $event.value">
+                    </mat-radio-button>
+                </mat-icon>
+                <h4 mat-line>
+                    ...{{ card.card.last4 }} ({{card.card.exp_month}}/{{card.card.exp_year}})
+                    <button mat-button color="warn" (click)="onDeleteCard(card.id, cards.length)">
+                        ELIMINAR
+                    </button>
+                </h4> 
+            </mat-list-item>
+        </mat-radio-group>
+    </mat-list> 
 </ng-container>
-
-<ng-template #loading>
-    <mat-spinner style="margin-left: auto; margin-right: auto;"></mat-spinner>
+<ng-template #noCards>
+    No tiene tarjetas registradas
 </ng-template>
+
+<app-loading-overlay [loading]="loading"></app-loading-overlay>
