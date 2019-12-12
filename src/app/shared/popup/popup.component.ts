@@ -36,6 +36,7 @@ export class PopupComponent {
     if (!success) {
       alert('Something went wrong, please try again');
     }
+    this.dialogRef.close('cancelPlan');
   }
 
 }
