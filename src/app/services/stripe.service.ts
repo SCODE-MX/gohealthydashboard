@@ -2,7 +2,6 @@
 
 import { Observable, of } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -19,13 +18,6 @@ declare var StripeCheckout: StripeCheckoutStatic;
 })
 export class StripeService {
   public user$: Observable<any>;
-  public checkout: {
-    isLoading: boolean;
-    confirmation: string;
-    open: Function;
-  };
-
-  private handler: StripeCheckoutHandler;
 
   constructor(
     private auth: AuthService,
@@ -50,36 +42,6 @@ export class StripeService {
     this.user$ = dbUser.pipe(
       map(userMapper)
     );
-
-    this.handler = StripeCheckout.configure({
-      key: environment.stripe.key,
-      locale: 'es',
-      currency: 'mxn',
-      allowRememberMe: false,
-      source: async (source) => {
-        this.checkout.isLoading = true;
-        this.checkout.confirmation = await this.subscribeToPlan('plan_FmpGElUUFBzVry', source.id).toPromise();
-        this.checkout.isLoading = false;
-      }
-    });
-
-    this.checkout = {
-      isLoading: false,
-      confirmation: '',
-      open: this.openAddCardCheckout,
-    };
-
-  }
-
-  private openAddCardCheckout = async (event) => {
-    const user = await this.getUser();
-    this.handler.open({
-      name: 'Registro de tarjeta',
-      description: 'Ingrese los datos su tarjeta',
-      email: user.email,
-      panelLabel: 'Agregar Tarjeta'
-    });
-    event.preventDefault();
   }
 
   public getUser() {
