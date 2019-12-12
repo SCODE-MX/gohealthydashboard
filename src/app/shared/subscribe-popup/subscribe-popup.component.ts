@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { StripeService } from 'src/app/services/stripe.service';
 import { environment } from 'src/environments/environment';
 
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 declare var StripeCheckout: StripeCheckoutStatic;
@@ -15,10 +15,10 @@ declare var StripeCheckout: StripeCheckoutStatic;
   templateUrl: './subscribe-popup.component.html',
   styleUrls: ['./subscribe-popup.component.scss']
 })
-export class SubscribePopupComponent implements OnInit {
+export class SubscribePopupComponent {
   private selectedCard: string;
   public loading = false;
-  public handler: StripeCheckoutHandler;
+  private handler: StripeCheckoutHandler;
   public cards: any[];
 
   constructor(
@@ -28,9 +28,6 @@ export class SubscribePopupComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.cards = data.cards;
-  }
-
-  ngOnInit() {
   }
 
   public onCardSelected(selectedCard: string): void {
@@ -50,7 +47,7 @@ export class SubscribePopupComponent implements OnInit {
     const user = await this.stripe.getUser();
 
     return new Promise((resolve, reject) => {
-      const handler = StripeCheckout.configure({
+      this.handler = StripeCheckout.configure({
         key: environment.stripe.key,
         locale: 'es',
         currency: 'mxn',
@@ -68,7 +65,7 @@ export class SubscribePopupComponent implements OnInit {
         }
       });
 
-      handler.open({
+      this.handler.open({
         name: 'Registro de tarjeta',
         description: 'Ingrese los datos su tarjeta',
         email: user.email,
@@ -88,6 +85,12 @@ export class SubscribePopupComponent implements OnInit {
     this.loading = false;
 
     this.dialogRef.close(confirmation);
+  }
+
+  // Close on navigate
+  @HostListener('window:popstate')
+  onPopState() {
+    this.handler.close();
   }
 
 }

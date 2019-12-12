@@ -5,7 +5,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { StripeService } from 'src/app/services/stripe.service';
 import { environment } from 'src/environments/environment';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { NoCardPopupComponent } from '../no-card-popup/no-card-popup.component';
@@ -20,7 +20,6 @@ import { SubscribePopupComponent } from '../subscribe-popup/subscribe-popup.comp
 export class NavbarComponent implements OnInit {
   public name: string;
   public loading = false;
-  public confirmation: any;
   private handler: StripeCheckoutHandler;
 
   constructor(
@@ -43,14 +42,15 @@ export class NavbarComponent implements OnInit {
 
     if (result === 'changeToPremium') {
       this.loading = true;
-      const cards = await this.stripe.getSources().pipe(first()).toPromise();
+      let cards = await this.stripe.getSources().pipe(first()).toPromise();
       this.loading = false;
 
       if (cards.length === 0) {
-        const addedCard = await this.openNoCardPopUp(event);
-        if (!addedCard) {
+        const customer = await this.openNoCardPopUp(event);
+        if (!customer) {
           return;
         }
+        cards = customer.sources.data;
       }
 
       await this.openSubscribePopUp(cards);
@@ -61,7 +61,7 @@ export class NavbarComponent implements OnInit {
 
   }
 
-  async openNoCardPopUp(event): Promise<boolean> {
+  async openNoCardPopUp(event): Promise<any> {
     const dialogRef = this.dialog.open(NoCardPopupComponent, {
       width: '400px',
       data: { }
@@ -71,8 +71,8 @@ export class NavbarComponent implements OnInit {
 
     if (result === 'addCard') {
       try {
-        await this.checkout(event);
-        return true;
+        const customer = await this.checkout(event);
+        return customer;
       } catch (error) {
         // Something went wrong while adding card.
         return false;
@@ -82,11 +82,11 @@ export class NavbarComponent implements OnInit {
   }
 
   // Open the checkout handler
-  async checkout(event) {
+  private async checkout(event) {
     const user = await this.stripe.getUser();
 
     return new Promise((resolve, reject) => {
-      const handler = StripeCheckout.configure({
+      this.handler = StripeCheckout.configure({
         key: environment.stripe.key,
         locale: 'es',
         currency: 'mxn',
@@ -94,8 +94,8 @@ export class NavbarComponent implements OnInit {
         source: async (source) => {
           try {
             this.loading = true;
-            this.confirmation = await this.stripe.attachSource(source.id).toPromise();
-            resolve(this.confirmation);
+            const customer = await this.stripe.attachSource(source.id).toPromise();
+            resolve(customer);
           } catch (error) {
             reject(error);
           } finally {
@@ -104,7 +104,7 @@ export class NavbarComponent implements OnInit {
         }
       });
 
-      handler.open({
+      this.handler.open({
         name: 'Registro de tarjeta',
         description: 'Ingrese los datos su tarjeta',
         email: user.email,
@@ -114,7 +114,7 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  async openSubscribePopUp(cards: any[]): Promise<void> {
+  private async openSubscribePopUp(cards: any[]): Promise<void> {
     const dialogRef = this.dialog.open(SubscribePopupComponent, {
       width: '400px',
       data: { cards }
@@ -124,6 +124,12 @@ export class NavbarComponent implements OnInit {
     if (success) {
       this.toastr.success('Se ha actualizado su plan', 'Actualización');
     }
+  }
+
+  // Close on navigate
+  @HostListener('window:popstate')
+  onPopState() {
+    this.handler.close();
   }
 
 }
