@@ -5,19 +5,27 @@ import { Observable } from 'rxjs';
 import { DatabaseService } from '../../services/database.service';
 import { take } from 'rxjs/operators';
 import { normalizeString } from '../../models/functions/general.functions';
+import { MatDialog } from '@angular/material';
+import { RequestComponent } from './request/request.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  // providers: [HttpClient]
 })
 export class DashboardComponent implements OnInit {
 
   userInfo: IUser;
   places: any;
+  endpoint: 'https://laFuncionChida';
 
   constructor(public auth: AuthService,
-    private database: DatabaseService) {}
+    private database: DatabaseService,
+    public dialog: MatDialog,
+    private http: HttpClient
+    ) {}
 
   ngOnInit() {
     console.log('this is dashboard');
@@ -31,5 +39,20 @@ export class DashboardComponent implements OnInit {
       });
     });
   }
-
+  openRequest() {
+    console.log('open request code');
+    this.openDialog().then(result => {
+      if (result) {
+        console.log('from dialog', {result}, this.userInfo);
+        const data = {...this.userInfo, ...result};
+        console.log({data});
+        // this.http.post(this.endpoint, data).subscribe();
+      }
+    });
+  }
+  openDialog(): Promise<any> {
+    const options = { width: '50%', height: '70%', hasBackdrop: true };
+    const dialogRef = this.dialog.open(RequestComponent, options);
+    return dialogRef.afterClosed().toPromise();
+  }
 }

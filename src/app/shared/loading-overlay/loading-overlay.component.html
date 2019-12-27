@@ -1,0 +1,13 @@
+<ng-template #customLoadingTemplate>
+  <div class="custom-class">
+    <mat-card style="max-width: 400;">
+      <mat-card-header>
+        <mat-card-title>GoHealthy</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        Espere un momento por favor
+      </mat-card-content>            
+    </mat-card>
+  </div>
+</ng-template>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px', fullScreenBackdrop: true}" [template]="customLoadingTemplate"></ngx-loading>

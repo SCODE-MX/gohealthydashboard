@@ -1,0 +1,11 @@
+@import '../../../../styles.scss';
+
+.button-success {
+    background-color: #88bf61;
+}
+.form {
+    &__textarea {
+        resize: none;
+        height: auto;
+    }
+}

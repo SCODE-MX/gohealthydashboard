@@ -1,18 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule, Routes } from '@angular/router';
+
+import { AdminGuardService } from './auth/admin-guard.service';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { AdminGuardService } from './auth/admin-guard.service';
-import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
 
 const routes: Routes = [
     {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',
-    },
-    {
+    }, {
       path: '',
       component: AdminLayoutComponent,
       canActivate: [AdminGuardService],
@@ -31,8 +31,7 @@ const routes: Routes = [
           loadChildren: () => import('../app/layouts//auth-layout/auth-layout.module').then(m => m.AuthLayoutModule)
         }
       ]
-    },
-    {
+    }, {
       path: '**',
       redirectTo: 'dashboard'
     }
