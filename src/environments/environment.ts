@@ -12,7 +12,10 @@ export const environment = {
     storageBucket: 'gohealthy-84b4c.appspot.com',
     messagingSenderId: '1069867771545',
     appId: '1:1069867771545:web:7c3791b21b5eae82'
-  }
+  },
+  stripe: {
+    key: 'pk_test_e3seNsumyGCb2APHEY4WLNZm00kNN3Emin'
+  },
 };
 
 /*
