@@ -26,13 +26,12 @@ export class CheckoutComponent implements OnInit {
   ngOnInit() {
     this.handler = StripeCheckout.configure({
       key: environment.stripe.key,
-      image: './assets/premium.jpg',
       locale: 'es',
       currency: 'mxn',
       allowRememberMe: false,
       source: async (source) => {
         this.loading = true;
-        this.confirmation = await this.stripe.subscribeToPlan('plan_FmpGElUUFBzVry',source.id).toPromise();
+        this.confirmation = await this.stripe.subscribeToPlan('plan_FmpGElUUFBzVry', source.id).toPromise();
         this.loading = false;
       }
     });
