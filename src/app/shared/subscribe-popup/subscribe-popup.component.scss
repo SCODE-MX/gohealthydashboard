@@ -1,0 +1,42 @@
+h1, mat-dialog-content, app-select-card, button {
+    font-family: 'Nunito', sans-serif;
+    color: #636363;
+}
+
+.button-principal {
+    border-radius: 10px;
+    transition: all ease 0.2s;
+    margin: 10px 0;
+
+    &_verde {
+        border: 1px solid #28795c;
+        background-color: #28795c;
+
+        &:hover {
+            background-color: white;
+            color: #28795c;
+        }
+    }
+
+    &_azul {
+        border: 1px solid #213f64;
+        background-color: #213f64;
+
+        &:hover {
+            background-color: white;
+            color: #213f64;
+        }
+    }
+
+    &_rojo {
+        border: 1px solid #f44336;
+        background-color: #f44336;
+
+        &:hover {
+            background-color: white;
+            color: #f44336;
+        }
+    }
+
+    
+}

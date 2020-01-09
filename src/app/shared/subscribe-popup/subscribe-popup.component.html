@@ -4,11 +4,11 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <app-select-card (cardSelected)="onCardSelected($event)" [cards]="cards" style="width: 100%;"></app-select-card>
-    <button (click)="onPayButtonClick()" mat-flat-button color="primary" style="width: 100%;">INICIAR SUBSCRIPCION</button>
-    <hr>
-    <button (click)="onAddCardButtonClick($event)" mat-flat-button color="accent" style="width: 100%;">AGREGAR NUEVA TARJETA</button>
-    <hr>
-    <button mat-flat-button color="warn" style="width: 100%;" mat-dialog-close>
+    <button class="button-principal button-principal_verde" (click)="onPayButtonClick()" mat-flat-button color="primary" style="width: 100%;">INICIAR SUSCRIPCION</button>
+    <br>
+    <button class="button-principal button-principal_azul" (click)="onAddCardButtonClick($event)" mat-flat-button color="accent" style="width: 100%;">AGREGAR NUEVA TARJETA</button>
+    <br>
+    <button class="button-principal button-principal_rojo" mat-flat-button color="warn" style="width: 100%;" mat-dialog-close>
         CANCELAR
     </button>
 </mat-dialog-actions>
