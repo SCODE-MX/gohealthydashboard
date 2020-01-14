@@ -16,6 +16,7 @@ import { NoCardPopupComponent } from './no-card-popup/no-card-popup.component';
 import { PopupComponent } from './popup/popup.component';
 import { SelectCardComponent } from './select-card/select-card.component';
 import { SubscribePopupComponent } from './subscribe-popup/subscribe-popup.component';
+import { SelectPlanComponent } from './select-plan/select-plan.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { SubscribePopupComponent } from './subscribe-popup/subscribe-popup.compo
     DeleteImageComponent,
     NoCardPopupComponent,
     SubscribePopupComponent,
-    LoadingOverlayComponent
+    LoadingOverlayComponent,
+    SelectPlanComponent
   ],
   imports: [
     CommonModule,
