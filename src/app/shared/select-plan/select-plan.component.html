@@ -1,1 +1,19 @@
-<p>select-plan works!</p>
+<h1 mat-dialog-title>Selecciona tu plan</h1>
+<mat-dialog-content>
+    Por favor selecciona el plan que más se ajuste a tus necesidades. 
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div class="opcion">
+        <input type="radio" name="gender" value=""> PLAN BÁSICO <br><span> <i>1 espacio en el directorio por $149.99 al mes</i></span>
+    </div>
+    <div class="opcion">
+        <input type="radio" name="gender" value=""> PLAN ESTÁNDAR <br><span> <i>2 espacios en el directorio por $199.99 al mes</i></span>
+    </div>
+    <div class="opcion">
+        <input type="radio" name="gender" value=""> PLAN PREMIUM <br><span> <i>3 a 5 espacios en el directorio por $249.99 al mes</i></span>
+    </div>
+
+    <button class="button-principal button-principal_verde" (click)="onPayButtonClick()" mat-flat-button color="primary" style="width: 100%;">ACEPTAR</button>
+    
+</mat-dialog-actions>
+<app-loading-overlay [loading]="loading"></app-loading-overlay>
