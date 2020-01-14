@@ -2,6 +2,7 @@
 
 
 import { ToastrService } from 'ngx-toastr';
+import { Plan } from 'src/app/models/interfaces/plan.interface';
 import { StripeService } from 'src/app/services/stripe.service';
 import { environment } from 'src/environments/environment';
 
@@ -19,6 +20,7 @@ export class SubscribePopupComponent {
   private selectedCard: string;
   public loading = false;
   private handler: StripeCheckoutHandler;
+  private plan: Plan;
   public cards: any[];
 
   constructor(
@@ -28,6 +30,7 @@ export class SubscribePopupComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.cards = data.cards;
+    this.plan = data.plan;
   }
 
   public onCardSelected(selectedCard: string): void {
@@ -81,7 +84,7 @@ export class SubscribePopupComponent {
       return;
     }
     this.loading = true;
-    const confirmation = await this.stripe.subscribeToPlan('plan_FmpGElUUFBzVry', this.selectedCard).toPromise();
+    const confirmation = await this.stripe.subscribeToPlan(this.plan.id, this.selectedCard).toPromise();
     this.loading = false;
 
     this.dialogRef.close(confirmation);

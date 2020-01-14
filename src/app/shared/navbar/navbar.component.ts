@@ -2,6 +2,7 @@ import { ToastrService } from 'ngx-toastr';
 import { reject } from 'q';
 import { first } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
+import { Plan } from 'src/app/models/interfaces/plan.interface';
 import { StripeService } from 'src/app/services/stripe.service';
 import { environment } from 'src/environments/environment';
 
@@ -43,7 +44,10 @@ export class NavbarComponent implements OnInit {
 
     if (result === 'changePlan') {
       const selectedPlan = await this.openSelectPlanPopUp();
-      console.log('selectedPlan :', selectedPlan);
+
+      if (!selectedPlan) {
+        return;
+      }
 
       this.loading = true;
       let cards = await this.stripe.getSources().pipe(first()).toPromise();
@@ -57,7 +61,7 @@ export class NavbarComponent implements OnInit {
         cards = customer.sources.data;
       }
 
-      await this.openSubscribePopUp(cards);
+      await this.openSubscribePopUp(cards, selectedPlan);
 
     } else if (result === 'cancelPlan') {
       this.toastr.success('Su plan ha sido cancelado', 'Actualización');
@@ -127,10 +131,10 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  private async openSubscribePopUp(cards: any[]): Promise<void> {
+  private async openSubscribePopUp(cards: any[], plan: Plan): Promise<void> {
     const dialogRef = this.dialog.open(SubscribePopupComponent, {
       width: '400px',
-      data: { cards }
+      data: { cards, plan }
     });
 
     const success = await dialogRef.afterClosed().toPromise();

@@ -1,6 +1,6 @@
-<h1 mat-dialog-title>Subscribirse a premium</h1>
+<h1 mat-dialog-title>Subscribirse a PLAN {{plan.name}}</h1>
 <mat-dialog-content>
-    Esta es una funcionalidad premium y actualmente tu cuenta es gratuita. Por favor seleccione la tarjeta a la cual se le hará el cargo de la subscripción mensual de $129.00 MXN. (Podrás cancelar la subscripción en el momento que tú desees) 
+    Esta es una funcionalidad premium y actualmente tu cuenta es gratuita. Por favor seleccione la tarjeta a la cual se le hará el cargo de la subscripción mensual de {{plan.cost/100 | currency:'MXN'}}. (Podrás cancelar la subscripción en el momento que tú desees) 
 </mat-dialog-content>
 <mat-dialog-actions>
     <app-select-card (cardSelected)="onCardSelected($event)" [cards]="cards" style="width: 100%;"></app-select-card>
