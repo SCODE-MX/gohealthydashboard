@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { NoCardPopupComponent } from '../no-card-popup/no-card-popup.component';
 import { PopupComponent } from '../popup/popup.component';
+import { SelectPlanComponent } from '../select-plan/select-plan.component';
 import { SubscribePopupComponent } from '../subscribe-popup/subscribe-popup.component';
 
 @Component({
@@ -40,7 +41,10 @@ export class NavbarComponent implements OnInit {
 
     const result = await dialogRef.afterClosed().toPromise();
 
-    if (result === 'changeToPremium') {
+    if (result === 'changePlan') {
+      const selectedPlan = await this.openSelectPlanPopUp();
+      console.log('selectedPlan :', selectedPlan);
+
       this.loading = true;
       let cards = await this.stripe.getSources().pipe(first()).toPromise();
       this.loading = false;
@@ -59,6 +63,15 @@ export class NavbarComponent implements OnInit {
       this.toastr.success('Su plan ha sido cancelado', 'Actualización');
     }
 
+  }
+
+  async openSelectPlanPopUp(): Promise<any> {
+    const dialogRef = this.dialog.open(SelectPlanComponent, {
+      width: '400px',
+      data: { }
+    });
+    const result = await dialogRef.afterClosed().toPromise();
+    return result;
   }
 
   async openNoCardPopUp(event): Promise<any> {
