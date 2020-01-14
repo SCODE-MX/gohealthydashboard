@@ -18,6 +18,7 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { MaterialModule } from './material.module';
 import { NoCardPopupComponent } from './shared/no-card-popup/no-card-popup.component';
 import { PopupComponent } from './shared/popup/popup.component';
+import { SelectPlanComponent } from './shared/select-plan/select-plan.component';
 import { SharedModule } from './shared/shared.module';
 import { SubscribePopupComponent } from './shared/subscribe-popup/subscribe-popup.component';
 
@@ -44,7 +45,8 @@ import { SubscribePopupComponent } from './shared/subscribe-popup/subscribe-popu
   entryComponents: [
     PopupComponent,
     NoCardPopupComponent,
-    SubscribePopupComponent
+    SubscribePopupComponent,
+    SelectPlanComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

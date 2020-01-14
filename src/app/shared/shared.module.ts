@@ -15,8 +15,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { NoCardPopupComponent } from './no-card-popup/no-card-popup.component';
 import { PopupComponent } from './popup/popup.component';
 import { SelectCardComponent } from './select-card/select-card.component';
-import { SubscribePopupComponent } from './subscribe-popup/subscribe-popup.component';
 import { SelectPlanComponent } from './select-plan/select-plan.component';
+import { SubscribePopupComponent } from './subscribe-popup/subscribe-popup.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +47,8 @@ import { SelectPlanComponent } from './select-plan/select-plan.component';
     SelectCardComponent,
     DropzoneComponent,
     NgxLoadingModule,
-    LoadingOverlayComponent
+    LoadingOverlayComponent,
+    SelectPlanComponent
   ]
 })
 export class SharedModule { }
