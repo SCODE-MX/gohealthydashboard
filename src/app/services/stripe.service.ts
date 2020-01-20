@@ -1,7 +1,7 @@
 /// <reference types="stripe-checkout"/>
 
 import { Observable, of } from 'rxjs';
-import { first, map, switchMap } from 'rxjs/operators';
+import { first, mergeMap, switchMap } from 'rxjs/operators';
 
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -29,18 +29,31 @@ export class StripeService {
       switchMap(user => user ? this.afs.doc(`users/${user.uid}`).valueChanges() : of(null))
     );
 
-    const userMapper = user => {
+    const userMapper = async (user) => {
+      const plans = await this.getPlans().toPromise();
+      let userPlan = plans.find(plan => plan.id === user.planId);
+
       const status = user.stateSub === 'inactive' ? 'INACTIVO' : 'ACTIVO';
-      const planName = status === 'ACTIVO' ? 'PREMIUM' : 'GRATUITO';
+      if (!userPlan || user.stateSub === 'inactive') {
+        userPlan = {
+          name: 'GRATUITO',
+          slots: 0,
+          cost: 0,
+        };
+      }
+
+      userPlan.name =  userPlan.name.toUpperCase();
+
       return {
-        planName,
+        plan: userPlan,
         status,
+        usedSlots: user.slots || 0,
         subscriptionId: user.subId,
       };
     };
 
     this.user$ = dbUser.pipe(
-      map(userMapper)
+      mergeMap(userMapper)
     );
   }
 
@@ -51,6 +64,8 @@ export class StripeService {
   public createCharge = (source: string, amount: number) => this.functions.httpsCallable('stripeCreateCharge')({source, amount});
 
   public getSources = () => this.functions.httpsCallable('stripeGetSources')({});
+
+  public getPlans = () => this.functions.httpsCallable('stripeGetPlans')({});
 
   public attachSource = (source: string) => this.functions.httpsCallable('stripeAttachSource')({source});
 
