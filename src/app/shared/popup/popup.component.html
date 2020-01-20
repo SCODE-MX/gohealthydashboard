@@ -1,19 +1,23 @@
-<div class="popup" *ngIf="user | async as plan">
+<div class="popup" *ngIf="user | async as user">
     <div class="popup__titulo">
       <h3>DETALLES DE MI PLAN</h3>
     </div>
 
     <div class="popup__info">
-      <p><span>PLAN ACTUAL: </span><br> {{plan.planName}}</p>
+      <p><span>PLAN ACTUAL: </span><br> {{user.plan.name}}</p>
     </div>
 
     <div class="popup__info">
-      <p><span>ESTADO: </span><br> {{plan.status}}</p>
+      <p><span>ESTADO: </span><br> {{user.status}}</p>
+    </div>
+
+    <div class="popup__info">
+      <p><span>ANUNCIOS DISPONIBLES: </span><br> {{user.plan.slots - user.usedSlots}}</p>
     </div>
 
     <div class="popup__btns">
-      <ng-container *ngIf="plan.planName == 'PREMIUM' && plan.status == 'ACTIVO'; else subscribe">
-        <button class="button" (click)="onCancelSubscription(plan.subscriptionId)">
+      <ng-container *ngIf="user.plan.name != 'GRATUITO' && user.status == 'ACTIVO'; else subscribe">
+        <button class="button" (click)="onCancelSubscription(user.subscriptionId)">
           CANCELAR MI PLAN
         </button>
       </ng-container>
