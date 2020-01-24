@@ -1,9 +1,12 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorage } from '@angular/fire/storage';
+import { firestore } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
-// import { FormulariosI } from '../models/interfaces';
+
+import { Injectable } from '@angular/core';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
+
+import { normalizeString } from '../models/functions/general.functions';
 import { DirectorioI } from '../models/interfaces/general.interfaces';
 
 @Injectable({
@@ -57,6 +60,18 @@ export class DatabaseService {
   delete(reference: string, id: string): Promise<void> {
     const collection = this.getCollection(reference);
     return collection.doc(id).delete();
+  }
+
+  setAdVisibleState(visible: boolean, userId: string, {estado, id}: DirectorioI): Promise<void> {
+    const stateRef = this.afs.firestore.doc(`Directorio/Estados/${normalizeString(estado)}/${id}`);
+    const userRef = this.afs.firestore.doc(`users/${userId}/`);
+    const increment =  firestore.FieldValue.increment(visible ? 1 : -1);
+
+    const batch = this.afs.firestore.batch();
+    batch.update(stateRef, {visible});
+    batch.update(userRef, {slots: increment});
+
+    return batch.commit();
   }
 
  async uploadfiles(reference: string, nombre: string, files: File[]): Promise<{url: string[], ref: string[]}> {
