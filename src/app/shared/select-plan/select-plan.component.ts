@@ -1,4 +1,6 @@
+import { map } from 'rxjs/operators';
 import { Plan } from 'src/app/models/interfaces/plan.interface';
+import { StripeService } from 'src/app/services/stripe.service';
 
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
@@ -9,32 +11,26 @@ import { MatDialogRef } from '@angular/material';
   styleUrls: ['./select-plan.component.scss']
 })
 export class SelectPlanComponent {
-
-  private plans: Plan[] = [
-    {
-      id: 'plan_GY3WrNTWwexCrr',
-      name: 'BÁSICO',
-      cost: 14999,
-      slots: 1,
-    },
-    {
-      id: 'plan_FmpGElUUFBzVry',
-      name: 'ESTÁNDAR',
-      cost: 19999,
-      slots: 2,
-    },
-    {
-      id: 'plan_GY3ZMpHPklRgq0',
-      name: 'PREMIUM',
-      cost: 24999,
-      slots: 5,
-    },
-  ];
+  private plans: Plan[];
+  private loading = false;
   private selectedPlan: Plan;
 
   constructor(
+    private stripeService: StripeService,
     public dialogRef: MatDialogRef<SelectPlanComponent>,
-  ) { }
+  ) {
+
+    this.loading = true;
+
+    stripeService.getPlans().pipe(
+      map(plans => plans.sort((a, b) => a.slots - b.slots))
+    ).toPromise()
+    .then(plans => {
+      this.plans = plans;
+      this.loading = false;
+    });
+
+  }
 
   public onSelectPlanButtonClick() {
     if (!this.selectedPlan) {

@@ -1,11 +1,13 @@
-<h1 mat-dialog-title>Selecciona tu plan</h1>
-<mat-dialog-content>
-    Por favor selecciona el plan que más se ajuste a tus necesidades. 
-</mat-dialog-content>
-<mat-dialog-actions>
-    <div class="opcion" *ngFor="let plan of plans">
-        <input type="radio" name="plan" [value]="plan" [(ngModel)]="selectedPlan"> PLAN {{plan.name.toUpperCase()}} <br><span> <i>{{plan.slots}} espacio(s) en el directorio por {{plan.cost/100 | currency:'MXN'}} al mes</i></span>
-    </div>
-    <button class="button-principal button-principal_verde" (click)="onSelectPlanButtonClick()" mat-flat-button color="primary" style="width: 100%;">ACEPTAR</button>
-</mat-dialog-actions>
+<ng-container *ngIf="!loading">
+    <h1 mat-dialog-title>Selecciona tu plan</h1>
+    <mat-dialog-content>
+        Por favor selecciona el plan que más se ajuste a tus necesidades. 
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <div class="opcion" *ngFor="let plan of plans">
+            <input type="radio" name="plan" [value]="plan" [(ngModel)]="selectedPlan"> PLAN {{plan.name.toUpperCase()}} <br><span> <i>{{plan.slots}} espacio(s) en el directorio por {{plan.cost/100 | currency:'MXN'}} al mes</i></span>
+        </div>
+        <button class="button-principal button-principal_verde" (click)="onSelectPlanButtonClick()" mat-flat-button color="primary" style="width: 100%;">ACEPTAR</button>
+    </mat-dialog-actions>  
+</ng-container>
 <app-loading-overlay [loading]="loading"></app-loading-overlay>
