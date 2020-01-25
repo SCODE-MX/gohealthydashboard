@@ -40,8 +40,8 @@ export class DatabaseService {
   getDocumentData<T>(reference: string, id: string) {
     return this.afs.collection(`${reference}`, ref =>
       ref.orderBy('createdOn', 'desc')
-    ).doc<T>(id).get().pipe(
-      map(doc => ({id: doc.id, ...doc.data()}))
+    ).doc<T>(id).snapshotChanges().pipe(
+      map(snapshot => ({ id: snapshot.payload.id, ...snapshot.payload.data() }))
       );
   }
 
