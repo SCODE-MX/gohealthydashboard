@@ -20,7 +20,7 @@ export class SubscribePopupComponent {
   private selectedCard: string;
   public loading = false;
   private handler: StripeCheckoutHandler;
-  private plan: Plan;
+  public plan: Plan;
   public cards: any[];
 
   constructor(

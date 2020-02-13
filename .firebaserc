@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "gohealthy-84b4c"
+  },
+  "targets": {
+    "gohealthy-84b4c": {
+      "hosting": {
+        "admin": [
+          "gohealthy-admin"
+        ]
+      }
+    }
+  }
+}

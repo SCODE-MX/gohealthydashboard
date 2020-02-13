@@ -12,7 +12,7 @@ import { MatDialogRef } from '@angular/material';
 })
 export class SelectPlanComponent {
   private plans: Plan[];
-  private loading = false;
+  public loading = false;
   private selectedPlan: Plan;
 
   constructor(
