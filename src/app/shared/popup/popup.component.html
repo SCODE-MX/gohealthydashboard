@@ -1,25 +1,29 @@
-<div class="popup" *ngIf="user | async as plan">
+<div class="popup" *ngIf="user | async as user">
     <div class="popup__titulo">
       <h3>DETALLES DE MI PLAN</h3>
     </div>
 
     <div class="popup__info">
-      <p><span>PLAN ACTUAL: </span><br> {{plan.planName}}</p>
+      <p><span>PLAN ACTUAL: </span><br> {{user.plan.name}}</p>
     </div>
 
     <div class="popup__info">
-      <p><span>ESTADO: </span><br> {{plan.status}}</p>
+      <p><span>ESTADO: </span><br> {{user.status}}</p>
+    </div>
+
+    <div class="popup__info">
+      <p><span>ANUNCIOS DISPONIBLES: </span><br> {{user.availableSlots}}</p>
     </div>
 
     <div class="popup__btns">
-      <ng-container *ngIf="plan.planName == 'PREMIUM' && plan.status == 'ACTIVO'; else subscribe">
-        <button class="button" (click)="onCancelSubscription(plan.subscriptionId)">
+      <ng-container *ngIf="user.plan.name != 'GRATUITO' && user.status == 'ACTIVO'; else subscribe">
+        <button class="button" (click)="onCancelSubscription(user.subscriptionId)">
           CANCELAR MI PLAN
         </button>
       </ng-container>
       <ng-template #subscribe>
-        <button mat-dialog-close="changeToPremium" class="button">
-          CAMBIAR A PLAN PREMIUM
+        <button mat-dialog-close="changePlan" class="button">
+          CAMBIAR MI PLAN
         </button>
       </ng-template>
       <button  mat-dialog-close cdkFocusInitial class="button button_gris">

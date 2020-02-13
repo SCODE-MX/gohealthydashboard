@@ -1,6 +1,7 @@
 /// <reference types="stripe-checkout"/>
 import { ToastrService } from 'ngx-toastr';
 import { first, take } from 'rxjs/operators';
+import { Plan } from 'src/app/models/interfaces/plan.interface';
 import { DatabaseService } from 'src/app/services/database.service';
 import { StripeService } from 'src/app/services/stripe.service';
 import { NoCardPopupComponent } from 'src/app/shared/no-card-popup/no-card-popup.component';
@@ -14,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { normalizeString } from '../../models/functions/general.functions';
 import { ChartType, DirectorioI } from '../../models/interfaces/general.interfaces';
+import { SelectPlanComponent } from '../../shared/select-plan/select-plan.component';
 
 declare var StripeCheckout: StripeCheckoutStatic;
 
@@ -166,11 +168,10 @@ export class DetalleComponent {
     return arrayChatType;
   }
 
-  async setAdVisibleState(value: boolean): Promise<void> {
+  async setAdVisibleState(value: boolean, userId: string): Promise<void> {
     try {
-      const {estado, id} = this.data;
       this.loading = true;
-      await this.service.update(`Directorio/Estados/${normalizeString(estado)}/`, {visible: value}, id);
+      await this.service.setAdVisibleState(value, userId, this.data);
 
       // If request was successful
       this.data.visible = value;
@@ -183,14 +184,24 @@ export class DetalleComponent {
     }
   }
 
-  onDeactivateAd(): Promise<void> {
-    return this.setAdVisibleState(false);
+  async onDeactivateAd(): Promise<void> {
+    this.loading = true;
+    const user = await this.stripe.user$.pipe(take(1)).toPromise();
+    this.loading = false;
+
+    return this.setAdVisibleState(false, user.id);
   }
 
   async onActivateAd(event) {
-    const plan = await this.stripe.user$.pipe(take(1)).toPromise();
-    if (plan.status === 'ACTIVO') {
-      return this.setAdVisibleState(true);
+    const user = await this.stripe.user$.pipe(take(1)).toPromise();
+    if (user.availableSlots) {
+      return this.setAdVisibleState(true, user.id);
+    }
+
+    // If user doesn't have enough slots, ask him to upgrade plan
+    const selectedPlan = await this.openSelectPlanPopUp();
+    if (!selectedPlan) {
+      return;
     }
 
     // Open dialog if user doesn't have registered a card
@@ -206,19 +217,16 @@ export class DetalleComponent {
       cards = customer.sources.data;
     }
 
-    await this.openSubscribePopUp(cards);
+    await this.openSubscribePopUp(cards, selectedPlan);
   }
 
-  private async openSubscribePopUp(cards: any[]): Promise<void> {
-    const dialogRef = this.dialog.open(SubscribePopupComponent, {
+  async openSelectPlanPopUp(): Promise<any> {
+    const dialogRef = this.dialog.open(SelectPlanComponent, {
       width: '400px',
-      data: { cards }
+      data: { }
     });
-
-    const success = await dialogRef.afterClosed().toPromise();
-    if (success) {
-      this.toastr.success('Se ha actualizado su plan', 'Actualización');
-    }
+    const result = await dialogRef.afterClosed().toPromise();
+    return result;
   }
 
   private async openNoCardPopUp(event): Promise<any> {
@@ -239,6 +247,18 @@ export class DetalleComponent {
       }
     }
     return false;
+  }
+
+  private async openSubscribePopUp(cards: any[], plan: Plan): Promise<void> {
+    const dialogRef = this.dialog.open(SubscribePopupComponent, {
+      width: '400px',
+      data: { cards, plan }
+    });
+
+    const success = await dialogRef.afterClosed().toPromise();
+    if (success) {
+      this.toastr.success('Se ha actualizado su plan', 'Actualización');
+    }
   }
 
   // Open the checkout handler

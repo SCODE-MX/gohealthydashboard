@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { Plan } from 'src/app/models/interfaces/plan.interface';
+import { StripeService } from 'src/app/services/stripe.service';
+
+import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 
 @Component({
@@ -6,17 +10,35 @@ import { MatDialogRef } from '@angular/material';
   templateUrl: './select-plan.component.html',
   styleUrls: ['./select-plan.component.scss']
 })
-export class SelectPlanComponent implements OnInit {
+export class SelectPlanComponent {
+  private plans: Plan[];
+  private loading = false;
+  private selectedPlan: Plan;
 
   constructor(
+    private stripeService: StripeService,
     public dialogRef: MatDialogRef<SelectPlanComponent>,
-  ) { }
+  ) {
 
-  ngOnInit() {
+    this.loading = true;
+
+    stripeService.getPlans().pipe(
+      map(plans => plans.sort((a, b) => a.slots - b.slots))
+    ).toPromise()
+    .then(plans => {
+      this.plans = plans;
+      this.loading = false;
+    });
+
   }
 
-  public close() {
-    this.dialogRef.close('Closed');
+  public onSelectPlanButtonClick() {
+    if (!this.selectedPlan) {
+      alert('Por favor seleccione un plan');
+      return;
+    }
+
+    this.dialogRef.close(this.selectedPlan);
   }
 
 }
