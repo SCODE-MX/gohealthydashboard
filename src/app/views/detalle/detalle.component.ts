@@ -112,9 +112,10 @@ export class DetalleComponent {
   }
 
   async save(): Promise<void> {
+    this.loading = true;
     console.log('data', {...this.data});
     const promiseArray: Promise<any>[] = [];
-    if (this.delImg) {
+    if (!!this.delImg) {
       console.log('hay imagenes para eliminar aquí se deben eliminar las fotos ref->', this.delImg);
       // tambien se deben actualizar los archivos temporales
       this.delImg.forEach(path => {
@@ -123,6 +124,7 @@ export class DetalleComponent {
       });
       await Promise.all(promiseArray).then(() => {
         this.toastr.success('El cambio de fotos se ha realizado exitosamente', 'Actualización');
+        this.delImg = [];
       })
       .catch(err => {
         this.toastr.error(err.message, 'Error');
@@ -140,7 +142,8 @@ export class DetalleComponent {
       this.service.update(`Directorio/Estados/${normalizeString(finalForm.estado)}/`, finalForm, finalForm.id, this.newImg)
       .then(() => {
         this.toastr.success('La operación se ha realizado exitosamente', 'Guardado');
-      })
+        this.newImg = [];
+        this.loading = false;       })
       .catch(err => {
         this.toastr.error(err.message, 'Error');
         console.error(err);
