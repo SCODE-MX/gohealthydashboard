@@ -143,9 +143,11 @@ export class DetalleComponent {
       .then(() => {
         this.toastr.success('La operación se ha realizado exitosamente', 'Guardado');
         this.newImg = [];
-        this.loading = false;       })
+        this.loading = false;
+      })
       .catch(err => {
         this.toastr.error(err.message, 'Error');
+        this.loading = false;
         console.error(err);
       });
     }

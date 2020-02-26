@@ -65,7 +65,7 @@ export class AuthService {
   }
 
   resetPasswordInit(email: string): Promise<void> {
-    return this.afAuth.auth.sendPasswordResetEmail(email, { url: 'http://localhost:4200/' });
+    return this.afAuth.auth.sendPasswordResetEmail(email);
   }
 
   // updateUser(user: IUser, photo?: File[]) {

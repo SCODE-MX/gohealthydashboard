@@ -1,25 +1,36 @@
 <div class="login">
-  <div class="login__holder flex container">
-    
-    <div class="login__form">
-      <div class="login__logo">
-        <img src="assets/logo_bco.png" alt="">
-      </div>
-      <form action="" class="form" [formGroup]="loginForm">
-        <div class="form__group">
-          <label class="form__label">E-mail</label>
-          <input class="form__input" type="text" formControlName="email" required/>
-        </div>
-        <div class="form__group">
-          <label class="form__label">Contraseña</label>
-          <input class="form__input" type="password" formControlName="password" required/>
-        </div>
-        <div class="form__group form__group_center">
-          <button button class="button" (click)="login()">
+    <div class="login__holder flex container">
+
+        <div class="login__form">
+            <div class="login__logo">
+                <img src="assets/logo_bco.png" alt="">
+            </div>
+            <form action="" class="form" [formGroup]="loginForm">
+                <div class="form__group">
+                    <label class="form__label">E-mail</label>
+                    <input class="form__input" type="text" formControlName="email" required/>
+                </div>
+                <div class="form__group">
+                    <label class="form__label">Contraseña</label>
+                    <input class="form__input" type="password" formControlName="password" required/>
+                    <label (click)="openConfirmation()" class="form__label form__label-reset">Olvidé mi contraseña</label>
+                </div>
+                <div class="form__group form__group_center">
+                    <button button class="button" (click)="login()">
             INGRESAR
           </button>
+                </div>
+            </form>
+            <ng-template #confirmation let-data>
+                <p>{{data.message}}</p>
+                <p style="text-align: center;"><b>{{data.email}}</b></p>
+                <p>{{data.question}}</p>
+                <mat-dialog-actions class="form__group form__group_center" style="justify-content: center;">
+                    <button button class="button" [mat-dialog-close]="true">CONTINUAR</button>
+                </mat-dialog-actions>
+
+            </ng-template>
+
         </div>
-      </form>
     </div>
-  </div>
 </div>

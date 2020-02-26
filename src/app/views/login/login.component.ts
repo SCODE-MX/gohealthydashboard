@@ -1,10 +1,11 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ViewContainerRef, ViewChild, TemplateRef, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/auth/auth.service';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-login',
@@ -13,8 +14,18 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class LoginComponent implements OnInit {
 loginForm: FormGroup;
+confData =  {
+  message: 'Se enviará un un link para restablecer la contraseña al siguiente correo:',
+  email: '',
+  question: '¿Deseas continuar?'
+}
+@ViewChild('confirmation', {static: false}) dialogRef: TemplateRef<any>;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private  router: Router, private toastr: ToastrService) {
+  constructor(private fb: FormBuilder,
+    private authService: AuthService,
+    private  router: Router,
+    public dialog: MatDialog,
+    private toastr: ToastrService) {
     this.loginForm = this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
@@ -45,31 +56,42 @@ loginForm: FormGroup;
     }
   }
 
-  // resetPassword() {
-  //   this.modal.fire({
-  //     title: 'Escribe tu correo electrónico',
-  //     input: 'text',
-  //     inputAttributes: {
-  //       autocapitalize: 'off'
-  //     },
-  //     showCancelButton: true,
-  //     confirmButtonText: 'Enviar correo',
-  //     allowOutsideClick: () => !this.modal.isLoading()
-  //   }).then((result) => {
-  //     console.log(result);
-  //     if (result.value) {
-  //       this.authService.resetPasswordInit(result.value).then( res => {
-  //         this.modal.fire(
-  //          '¡Tu correo ha sido enviado!',
-  //           'El correo electrónico con las instrucciones para reestablecer tu contraseña ha sido enviado a tu correo electrónico'
-  //         );
-  //       }).catch( err => {
-  //         console.error(err);
-  //         this.modal.fire('Error', err.message, 'error');
-  //       });
-  //     }
-  //   }).catch( err => this.modal.fire('Error', err, 'error') );
-  // // this.authService.resetPasswordInit()
-  // }
+  resetPassword() {
+    const email = this.loginForm.value.email;
+      if (!!email && this.loginForm.get('email').valid) {
+        this.authService.resetPasswordInit(email).then( res => {
+          this.toastr.success(`Se ha enviado un link para reestablecer tu contraseña al siguiente correo: ${email}`, 'Enviado!');
+        }).catch( err => {
+          console.error(err);
+          this.toastr.error(`Hubo un problema al momento de restablecer contraseña. Código: ${err.code}`, 'Error');
+        });
+      } else {
+        this.toastr.warning('Verifica y/o llena el campo E-mail', 'Atención');
+      }
+  }
+
+  openConfirmation() {
+    const email = this.loginForm.value.email;
+    if (!!email && this.loginForm.get('email').valid) {
+      console.log('open request code');
+      this.openDialog(email).then(result => {
+        if (result) {
+          console.log('from dialog', {result});
+          this.resetPassword();
+        }
+      });
+    } else {
+      this.toastr.warning('Verifica y/o llena el campo E-mail', 'Atención');
+    }
+  }
+  openDialog(email: string): Promise<any> {
+    const options = { width: '50%', hasBackdrop: true, data: {...this.confData, email} };
+    const dialogRef = this.dialog.open(this.dialogRef, options);
+    return dialogRef.afterClosed().toPromise();
+  }
+
+  try() {
+    this.toastr.success('Funciona', 'Éxito');
+  }
 
 }

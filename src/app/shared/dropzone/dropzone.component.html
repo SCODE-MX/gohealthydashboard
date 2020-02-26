@@ -1,5 +1,5 @@
 <div class="photos__container">
-    <div *ngFor="let url of urls; let i = index;"  class="photos__item">
+    <div *ngFor="let url of urls; let i = index;" class="photos__item">
         <app-delete-image [url]="url" [disabled]="true" (deleted)="onDelete(i)"></app-delete-image>
     </div>
 </div>
@@ -7,24 +7,24 @@
 <div class="">
     <!-- <p>Aquí va el dropzone</p> -->
     <!-- <div class="photos__item"> -->
-        <div class="photos__container">
-            <div class="custom-dropzone" ngx-dropzone [accept]="'image/png/*'" [expandable]="false" [disabled]="showDrop" (change)="onSelect($event)">
-                <ngx-dropzone-label>
-                    <div>
-                        <p><i class="fas fa-plus" style="font-size: 30px;"></i><br>AGREGAR IMAGEN</p>
-                    </div>
-                </ngx-dropzone-label>
-                <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)" style="height: 200px;">
-                    <ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
-                </ngx-dropzone-image-preview>
-            </div>
+    <div class="photos__container">
+        <div class="custom-dropzone" ngx-dropzone [accept]="'image/png/*'" [expandable]="false" [disabled]="showDrop" (change)="onSelect($event)">
+            <ngx-dropzone-label>
+                <div>
+                    <p><i class="fas fa-plus" style="font-size: 30px;"></i><br>AGREGAR IMAGEN</p>
+                </div>
+            </ngx-dropzone-label>
+            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)" style="height: 200px;">
+                <ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
+            </ngx-dropzone-image-preview>
         </div>
+    </div>
 
-        <div class="photos__container" style="justify-content: space-between;">
-            <p>
-               <b>{{ contador }}/5</b>
-            </p>
-            <button class="button" style="width: 250px;" color="primary" (click)="resetDropzone()">Reiniciar fotos</button>
-        </div>
-        <!-- </div> -->
+    <div class="photos__container" style="justify-content: space-between;">
+        <p>
+            <b>{{ contador }}/5</b>
+        </p>
+        <button class="button" style="width: 250px;" color="primary" (click)="resetDropzone()">Reiniciar vista previa</button>
+    </div>
+    <!-- </div> -->
 </div>
