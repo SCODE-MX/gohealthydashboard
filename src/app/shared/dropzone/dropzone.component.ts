@@ -23,6 +23,7 @@ export class DropzoneComponent implements OnInit {
   // editable = false;
   contador: number;
   showDrop: boolean;
+  showReload = false;
   files: File[] = [];
   deletedFotos: string[] = [];
   constructor() { }
@@ -50,6 +51,9 @@ export class DropzoneComponent implements OnInit {
         console.log('onSelect', this.refs);
         this.contador = this.files.length;
       }
+      if (this.files.length > 0) {
+        this.showReload = true;
+      }
     }
     if (this.contador > 0) {
       this.isValid.emit(true);
@@ -61,6 +65,9 @@ export class DropzoneComponent implements OnInit {
   onRemove(event: any) {
     this.files.splice(this.files.indexOf(event), 1);
     this.added.emit(this.files);
+    if (this.files.length < 1) {
+      this.showReload = false;
+    }
     if (this.refs) {
       this.contador = this.refs.length + this.files.length;
     } else {

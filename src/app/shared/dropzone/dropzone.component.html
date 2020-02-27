@@ -8,6 +8,7 @@
     <!-- <p>Aquí va el dropzone</p> -->
     <!-- <div class="photos__item"> -->
     <div class="photos__container">
+        <h3>Imágenes para cargar</h3>
         <div class="custom-dropzone" ngx-dropzone [accept]="'image/png/*'" [expandable]="false" [disabled]="showDrop" (change)="onSelect($event)">
             <ngx-dropzone-label>
                 <div>
@@ -24,7 +25,7 @@
         <p>
             <b>{{ contador }}/5</b>
         </p>
-        <button class="button" style="width: 250px;" color="primary" (click)="resetDropzone()">Reiniciar vista previa</button>
+        <button *ngIf="showReload" class="button" style="width: 250px;" color="primary" (click)="resetDropzone()">Reiniciar vista previa</button>
     </div>
     <!-- </div> -->
 </div>
